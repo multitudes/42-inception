@@ -18,3 +18,15 @@ configured) only without nginx.
 - A second volume that contains your WordPress website files.
 - A docker-network that establishes the connection between your containers.
 - Your containers have to restart in case of a crash.
+
+## Bonus part
+Set up redis cache for your WordPress website in order to properly manage the cache.  
+- Set up a FTP server container pointing to the volume of your WordPress website.  
+- Create a simple static website in the language of your choice except PHP (Yes, PHP is excluded!). For example, a showcase site or a site for presenting your resume.  
+- Set up Adminer.  
+- Set up a service of your choice that you think is useful. During the defense, you will have to justify your choice.  
+
+
+## Links
+
+
