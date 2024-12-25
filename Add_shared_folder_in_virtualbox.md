@@ -1,4 +1,8 @@
-Yes, specifying `Auto-mount` and a mount point can help ensure that the shared folder is correctly mounted. Here are the steps:
+
+# Add shared folder in VirtualBox
+
+Specifying `Auto-mount` and a mount point can help ensure that the shared folder is correctly mounted. 
+Here are the steps:
 
 1. **Add the Shared Folder in VirtualBox:**
    - Go to the VirtualBox Manager.
@@ -34,3 +38,24 @@ Yes, specifying `Auto-mount` and a mount point can help ensure that the shared f
      ```
 
 Make sure that `shared_folder` in the `mount` command matches the name you specified in the VirtualBox shared folder settings. If you named it something else, use that name instead.
+
+## permission denied?
+To resolve the "permission denied" issue for your shared folder in VirtualBox, follow these steps:
+
+1. **Add User to vboxsf Group**: Ensure your user is part of the `vboxsf` group.
+   ```sh
+   sudo usermod -aG vboxsf your_username
+   ```
+   Replace `your_username` with your actual username.
+
+2. **Reboot the VM**: Reboot your virtual machine to apply the group changes.
+   ```sh
+   sudo reboot
+   ```
+
+3. **Verify Access**: After rebooting, check if you can access the shared folder.
+   ```sh
+   ls /mnt/shared_folder
+   ```
+
+This should resolve the permission issue and allow you to access the shared folder.

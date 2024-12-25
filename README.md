@@ -2,6 +2,9 @@
 
 Another project for 42 Berlin.
 
+I created a new virtual machine with VirtualBox and installed Debian.
+
+
 ## Requirements
 - This project needs to be done on a Virtual Machine.
 - All the files required for the configuration of your project must be placed in a srcs folder.
@@ -26,7 +29,32 @@ Set up redis cache for your WordPress website in order to properly manage the ca
 - Set up Adminer.  
 - Set up a service of your choice that you think is useful. During the defense, you will have to justify your choice.  
 
+## Instructions
+the steps are:
+- start the virtual machine with port forwarding 3000:443 and 2222:22 for ssh
+- ssh into it with 
+```bash
+ssh -p 2222 user@localhost
+```
+- In my shared directory I have my srcs folder
+and I cd into it
+```bash
+cd /mnt/shared_folder/srcs/requirements/nginx/
+```
+- I run the docker commands
+```bash
+docker build -t nginx .
+docker run --rm -d -p 443:443 --name nginx-container nginx
+```
+- I check if it is running
+```bash
+docker ps
+```
+- I can now access the website with https://localhost:3000 and accept the warning from the browser
+
+
 
 ## Links
 
-
+The last stable versions of Alpine:  
+https://alpinelinux.org/releases/  

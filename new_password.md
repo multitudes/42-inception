@@ -37,3 +37,5 @@ I have a virtual machine running Debian and I forgot my password. How can I rese
      ```
 
 After rebooting, you should be able to log in with the new password.
+
+So far I chose "Cinelli!" as my new password. I will use it to log in to my Debian virtual machine.
