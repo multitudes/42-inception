@@ -181,5 +181,16 @@ Bye
 
 This example demonstrates how to create a table, insert data, query data, and exit the SQL prompt.
 
+## using the run.sh script
+
+with the official image of mariadb that i found on github and the script... this is how you test a container 
+In RUN you need to pass the environment variables to the container. 
+```bash
+docker build -t maria .
+docker run -d --name mariadb-container   -e MYSQL_ROOT_PASSWORD=rut   -e MYSQL_DATABASE=mydatabase   -e MYSQL_USER=myuser   -e MYSQL_PASSWORD=mypassword   -p 3306:3306   -v ~/data/db-data:/var/lib/mysql   maria
+docker exec -it maria mysql -u root -p
+```
+the above will work with the rut password.
+
 ## links
 https://mariadb.org/download/  

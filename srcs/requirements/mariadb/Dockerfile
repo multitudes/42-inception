@@ -5,23 +5,22 @@ FROM alpine:3.20
 RUN apk update && apk upgrade
 
 # Install MariaDB
-RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils
+RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils pwgen && \
+    rm -f /var/cache/apk/*
 
-# Copy the MariaDB configuration file - do i need this?
-# COPY ./tools/server.cnf /etc/mysql/mariadb.conf.d/server.cnf
+# add is like copy
+ADD tools/run.sh /scripts/run.sh
 
-# Create necessary directories and set permissions
-RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
+RUN mkdir /docker-entrypoint-initdb.d && \
+	mkdir /scripts/pre-exec.d && \
+	mkdir /scripts/pre-init.d && \
+	chmod -R 755 /scripts
 
-# Initialize MariaDB
-RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
+# volume will be in the docker compose file
+# VOLUME ["/var/lib/mysql"]
 
-# Copy entrypoint script
-COPY ./tools/docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# This doesnt do anything just for docs
+EXPOSE 3306
 
-# Set entrypoint
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/scripts/run.sh"]
 
-# start MariaDB
-CMD ["mysqld"]
