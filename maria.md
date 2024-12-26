@@ -192,5 +192,100 @@ docker exec -it maria mysql -u root -p
 ```
 the above will work with the rut password.
 
+The provided 
+
+run.sh
+
+ script is designed to handle both environment variables and secrets. It checks for environment variables first and then falls back to secrets if the environment variables are not set.
+
+### Explanation
+
+1. **Environment Variables**: The script first checks if the `MYSQL_` environment variables are set. If they are not set, it then checks for corresponding `MARIADB_` environment variables.
+2. **Secrets**: If neither the `MYSQL_` nor `MARIADB_` environment variables are set, the script checks for secrets in the `/run/secrets/` directory.
+3. **File Variables**: The script also handles `_FILE` variables, which can be used to read the values from files.
+
+### Example Usage
+
+Here is how you can use the script with both environment variables and secrets:
+
+#### Using Environment Variables
+
+You can set the environment variables directly when running the container:
+
+```sh
+sudo docker run -d --name mariadb-container \
+  -e MYSQL_ROOT_PASSWORD=rut \
+  -e MYSQL_DATABASE=mydatabase \
+  -e MYSQL_USER=myuser \
+  -e MYSQL_PASSWORD=mypassword \
+  -p 3306:3306 \
+  -v ~/data/db-data:/var/lib/mysql \
+  mariadb-alpine
+```
+
+#### Using Secrets
+
+You can create Docker secrets and use them in your Docker Compose file:
+
+1. **Create Secrets**:
+
+```sh
+echo "rut" | docker secret create mysql_root_password -
+echo "mydatabase" | docker secret create mysql_database -
+echo "myuser" | docker secret create mysql_user -
+echo "mypassword" | docker secret create mysql_password -
+```
+
+2. **Update Docker Compose File**:
+
+```yaml
+version: '3.8'
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE_FILE: /run/secrets/mysql_database
+      MYSQL_USER_FILE: /run/secrets/mysql_user
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    secrets:
+      - mysql_root_password
+      - mysql_database
+      - mysql_user
+      - mysql_password
+    restart: always
+
+secrets:
+  mysql_root_password:
+    external: true
+  mysql_database:
+    external: true
+  mysql_user:
+    external: true
+  mysql_password:
+    external: true
+
+volumes:
+  db-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/data/db-data
+      o: bind
+```
+
+### Summary
+
+- **Environment Variables**: The script checks for `MYSQL_` and `MARIADB_` environment variables.
+- **Secrets**: If environment variables are not set, the script checks for secrets in the `/run/secrets/` directory.
+- **File Variables**: The script also handles `_FILE` variables to read values from files.
+
+
+
 ## links
 https://mariadb.org/download/  

@@ -1,19 +1,30 @@
 # The latest version of alpine is 3.21
 # therefore, we are using 3.20
 FROM alpine:3.20
+
 RUN apk update && apk upgrade
 
 # Install openssl and nginx. Dont use any previous cache
-RUN apk add --no-cache openssl nginx 
+RUN apk add --no-cache openssl nginx gettext
+RUN mkdir -p /var/www/html/
 
-# Copy the nginx configuration file
-COPY tools/conf /etc/nginx/nginx.conf
+# copy conf file
+COPY	./tools/nginx.conf /etc/nginx/nginx.conf
+COPY	./tools/default.conf /etc/nginx/http.d/default.conf
 
-# Copy the ssl certificate and key - copy is recursive
-COPY tools/ssl /etc/nginx/ssl
+# openssl is used to generate a self-signed certificate
+ARG 	DOMAIN_NAME
+RUN 	openssl req -x509 -nodes -days 365 -newkey rsa:2048\
+		-keyout /etc/ssl/private/nginx-selfsigned.key\
+		-out /etc/ssl/certs/nginx-selfsigned.crt\
+		-subj "/C=DE/ST=IDF/L=BERLIN/O=42Network/OU=42BERLIN/CN=${DOMAIN_NAME:-localhost}"
 
-# I will use port 443 but no need to expose it here
-# it will be exposed in the docker run command or docker compose
+RUN		adduser -D -g 'www' www &&\
+		chown -R www:www /run/nginx/ &&\
+		chown -R www:www /var/www/html/
+
+# Expose NGINX ports
+EXPOSE 443
 
 # start nginx running in the background
 CMD ["nginx", "-g", "daemon off;"]

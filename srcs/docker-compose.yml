@@ -4,9 +4,6 @@ services:
 
   mariadb:
     build: requirements/mariadb
-    volumes:
-      - db-data:/var/lib/mysql
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -16,6 +13,9 @@ services:
       - inception_network
     ports:
       - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: always
     command: echo "[MARIA] I'm running ${COMPOSE_PROJECT_NAME}"
 
   wordpress:
@@ -38,6 +38,8 @@ services:
 
   nginx:
     build: ./requirements/nginx
+    environment:
+      - DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
       - "443:443"
     volumes:
