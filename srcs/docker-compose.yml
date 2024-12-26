@@ -1,9 +1,6 @@
+name: inception
+
 services:
-  nginx:
-    build: ./requirements/nginx
-    ports:
-      - "443:443"
-    restart: always
 
   mariadb:
     build: requirements/mariadb
@@ -12,9 +9,14 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - inception_network
     ports:
       - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
     restart: always
+    command: echo "[MARIA] I'm running ${COMPOSE_PROJECT_NAME}"
 
   wordpress:
     build: ./requirements/wordpress
@@ -23,20 +25,36 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+    networks:
+      - inception_network
     ports:
       - "80:80"
-    restart: always
     volumes:
-      - wd-data:/var/www/html
-      - wd-files:/var/www/html/wp-content/uploads
+      - wd-files:/var/www/html
+    command: echo "[WORDPRESS] I'm running ${COMPOSE_PROJECT_NAME}"
+    depends_on:
+      - mariadb
+    restart: always
 
+  nginx:
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wd-files:/var/www/html
+    networks:
+      - inception_network
+    command: echo "[NGINX] I'm running ${COMPOSE_PROJECT_NAME}"
+    depends_on:
+      - wordpress
+    restart: always
 
 volumes:
-  wd-data:
+  db-data:
     driver: local
     driver_opts:
       type: none
-      device: ~/data/wd-data
+      device: ~/data/db-data
       o: bind
   wd-files:
     driver: local
@@ -46,5 +64,5 @@ volumes:
       o: bind
 
 networks:
-  all:
+  inception_network:
     driver: bridge

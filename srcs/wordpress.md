@@ -12,3 +12,9 @@ Docker does not automatically create the host directories specified in the devic
 mkdir -p ~/data/wd-data
 mkdir -p ~/data/wd-files
 ```
+
+
+## links
+https://hub.docker.com/_/wordpress  
+
+https://github.com/docker/awesome-compose/blob/master/official-documentation-samples/wordpress/README.md

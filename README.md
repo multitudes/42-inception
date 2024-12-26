@@ -2,7 +2,6 @@
 
 Another project for 42 Berlin.
 
-I created a new virtual machine with VirtualBox and installed Debian.
 
 
 ## Requirements
@@ -30,11 +29,12 @@ Set up redis cache for your WordPress website in order to properly manage the ca
 - Set up a service of your choice that you think is useful. During the defense, you will have to justify your choice.  
 
 ## Instructions
-the steps are:
-- start the virtual machine with port forwarding 3000:443 and 2222:22 for ssh
+Create a new virtual machine with VirtualBox and install Debian.
+- Install Docker and Docker Compose on your virtual machine.
+- start the virtual machine with port forwarding 3000:443 and 2222:22 for ssh (for debug)
 - ssh into it with 
 ```bash
-ssh -p 2222 user@localhost
+ssh -p 2222 lbrusa@localhost
 ```
 - In my shared directory I have my srcs folder
 and I cd into it
@@ -52,7 +52,17 @@ docker ps
 ```
 - I can now access the website with https://localhost:3000 and accept the warning from the browser
 
+## MARIA DB
+- I cd into the mariadb folder
+as above I run the docker commands
+```bash
+to start it you can run the following commands
 
+```bash
+docker build . -t maria
+docker run --rm -d -p 3006:3006 --name mariadb maria
+```
+For more testing look into the [maria.md](maria.md) file
 
 ## Links
 

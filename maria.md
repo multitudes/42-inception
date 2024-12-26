@@ -25,7 +25,7 @@ you can now access the mariadb container with the following command
 ```bash
 docker exec -it mariadb mysql -u root -p
 ```
-the options are -u for the name of the user, in this case root and -p for the password which will be asked after you run the command.
+where I am accessing the mariadb cntainer and running the mysql command with the -u and -p options which are the user and password options. 
 
 ## compose file
 Using a docker-compose file.
