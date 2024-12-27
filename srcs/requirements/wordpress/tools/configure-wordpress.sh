@@ -38,4 +38,4 @@ else
 fi
 
 echo "[WP config] Starting WordPress fastCGI on port 9000."
-exec /usr/sbin/php-fpm81 -F -R
+exec /usr/sbin/php-fpm82 -F -R
