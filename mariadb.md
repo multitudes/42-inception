@@ -1,17 +1,29 @@
 # what is mariadb
 
 MariaDB is a community-developed fork of the MySQL relational database management system intended to remain free under the GNU GPL. Being a fork of a leading open source software system, it is notable for being led by its original developers.
-Oracle Corporation, the original developers of MySQL, created a new non-free version of MySQL (version 5.5), which is why the developers of MariaDB decided to create their own fork of MySQL. MariaDB intends to maintain high compatibility with MySQL.
+Oracle Corporation, created a new non-free version of MySQL (version 5.5), which is why the developers of MariaDB decided to create their own fork of MySQL. MariaDB intends to maintain high compatibility with MySQL.
 
-# install a mariadb docker container
+## install a mariadb docker container
 
-with the most basic dockerfile you can create a mariadb container
+with the most basic dockerfile you can create a mariadb container:
 
 ```Dockerfile
+FROM	alpine:3.20
 
+# Install MariaDB
+RUN		apk update && apk upgrade &&\
+		apk add mariadb mariadb-client
+
+# Copy MariaDB configuration files
+COPY	./conf/configure-mariadb.sh /tmp/configure-mariadb.sh
+RUN		chmod +x /tmp/configure-mariadb.sh
+
+# Run MariaDB configuration script as entry point
+ENTRYPOINT	[ "sh", "/tmp/configure-mariadb.sh" ]
 ```
 
-to start it you can run the following commands
+I use a script to configure the mariadb container which i found on the official mariadb github page.
+To start it you can run the following commands:
 
 ```bash
 docker build . -t maria
@@ -26,6 +38,17 @@ you can now access the mariadb container with the following command
 docker exec -it mariadb mysql -u root -p
 ```
 where I am accessing the mariadb cntainer and running the mysql command with the -u and -p options which are the user and password options. 
+
+This will not work however because the mariadb container is not configured to accept connections from the host machine. Especially we did not set the root password.
+This is better if we access manually the container and set the password. I will pass the env variables manually.
+
+```bash
+docker run -d --name mariadb-container   -e MYSQL_ROOT_PASSWORD=rut   -e MYSQL_DATABASE=mydatabase   -e MYSQL_USER=myuser   -e MYSQL_PASSWORD=mypassword   -p 3306:3306   -v ~/data/db-data:/var/lib/mysql   maria
+
+docker exec -it mariadb mysql -u root -p
+```
+the above will work with the rut password.
+and then i can use the mysql command to access the mariadb container as described below.
 
 ## compose file
 Using a docker-compose file.
@@ -196,7 +219,7 @@ The provided
 
 run.sh
 
- script is designed to handle both environment variables and secrets. It checks for environment variables first and then falls back to secrets if the environment variables are not set.
+script is designed to handle both environment variables and secrets. It checks for environment variables first and then falls back to secrets if the environment variables are not set.
 
 ### Explanation
 

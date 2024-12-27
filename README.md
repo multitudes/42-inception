@@ -2,8 +2,6 @@
 
 Another project for 42 Berlin.
 
-
-
 ## Requirements
 - This project needs to be done on a Virtual Machine.
 - All the files required for the configuration of your project must be placed in a srcs folder.
@@ -28,33 +26,49 @@ Set up redis cache for your WordPress website in order to properly manage the ca
 - Set up Adminer.  
 - Set up a service of your choice that you think is useful. During the defense, you will have to justify your choice.  
 
-## Instructions
-Create a new virtual machine with VirtualBox and install Debian.
+## In the virtual machine
+First we create a new virtual machine with VirtualBox and install Debian.
 - Install Docker and Docker Compose on your virtual machine.
 - start the virtual machine with port forwarding 3000:443 and 2222:22 for ssh (for debug)
 - ssh into it with 
 ```bash
 ssh -p 2222 lbrusa@localhost
 ```
-- In my shared directory I have my srcs folder
-and I cd into it
+- In my shared directory I have my srcs folder with the project files.  
+I cd into it with
 ```bash
 cd /mnt/shared_folder/srcs/requirements/nginx/
 ```
-- I run the docker commands
+
+## My docker compose
+In my root directory I have a Makefile which creates the directories to be used as persistent data by my applications and which will call the docker-compose file.
+
+For more info about how a docker compose file look at the [docker-compose.md](docker-compose.md) file.
+The docker-compose file is in the root directory and it is used to define and run multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the services from your configuration.
+
+## My containers
+I have 3 containers in this project two volumes	and a network.
+
+Each container has its own Dockerfile and the docker-compose file is used to build the images and run the containers.
+
+### NGINX
+For more info about nginx look at the [nginx.md](nginx.md) file.  
+I can start the nginx container on its own with the following commands
+
 ```bash
 docker build -t nginx .
 docker run --rm -d -p 443:443 --name nginx-container nginx
-# or with the name
-docker run --rm -d -p 443:443 --name  nginx-container -e DOMAIN_NAME=lbrusa.42.de  nginx
+# or with the env variable
+docker run --rm -d -p 443:443 --name  nginx-container -e DOMAIN_NAME=lbrusa.42.de nginx
 ```
-- I check if it is running
+I check if it is running:
 ```bash
 docker ps
 ```
 - I can now access the website with https://localhost:3000 and accept the warning from the browser
 
-## MARIA DB
+### MARIADB
+For more info about mariadb look at the [mariadb.md](mariadb.md) file.
 - I cd into the mariadb folder
 as above I run the docker commands
 ```bash
