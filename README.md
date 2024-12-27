@@ -40,6 +40,105 @@ I cd into it with
 cd /mnt/shared_folder/srcs/requirements/nginx/
 ```
 
+## Makefile
+
+I will use the makefile to start the docker-compose file and restart the containers.
+- The `docker compose up --build` command is used to build or rebuild the Docker images specified in your `docker-compose.yml` file before starting the containers. This is useful when you have made changes to the Dockerfiles or the context directories and want to ensure that the latest changes are included in the images.
+
+### Explanation:
+- **`docker compose up`**: This command creates and starts the containers as defined in your `docker-compose.yml` file.
+- **`--build`**: This flag forces Docker Compose to build the images before starting the containers. It ensures that any changes to the Dockerfiles or the context directories are included in the images.
+
+### Example Usage:
+```sh
+docker compose up --build
+```
+
+### When to Use `--build`:
+- When you have made changes to the Dockerfiles.
+- When you have made changes to the files in the build context (e.g., application code, configuration files).
+- When you want to ensure that the latest changes are included in the images.
+
+### Example `docker-compose.yml`:
+```yaml
+
+
+name: inception
+
+services:
+  nginx:
+    build: ./requirements/nginx
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+    ports:
+      - "443:443"
+    volumes:
+      - wd-files:/var/www/html
+    networks:
+      - inception_network
+    depends_on:
+      - wordpress
+    restart: on-failure
+
+  mariadb:
+    build: requirements/mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - inception_network
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: on-failure
+
+  wordpress:
+    build: ./requirements/wordpress
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - inception_network
+    ports:
+      - "80:80"
+    volumes:
+      - wd-files:/var/www/html
+    depends_on:
+      - mariadb
+    restart: on-failure
+
+volumes:
+  db-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/data/db-data
+      o: bind
+  wd-files:
+    driver: local
+    driver_opts:
+      type: none
+      device: ~/data/wd-files
+      o: bind
+
+networks:
+  inception_network:
+    driver: bridge
+```
+
+### Summary:
+Using `docker compose up --build` ensures that your Docker images are built with the latest changes before starting the containers. This is particularly useful during development or when you have made updates to your Dockerfiles or application code.
+
+- How to Erase Volumes:
+You can use the docker-compose down -v command to stop the containers and remove the volumes:
+
+
+
 ## My docker compose
 In my root directory I have a Makefile which creates the directories to be used as persistent data by my applications and which will call the docker-compose file.
 

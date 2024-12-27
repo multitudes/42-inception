@@ -7,13 +7,15 @@ RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils pwgen && \
     rm -f /var/cache/apk/*
 
 # add is like copy
-ADD tools/run.sh /scripts/run.sh
 
 # TODO remove the preexec and preinit scripts if unused
-RUN mkdir /docker-entrypoint-initdb.d && \
-	mkdir /scripts/pre-exec.d && \
-	mkdir /scripts/pre-init.d && \
-	chmod -R 755 /scripts
+# RUN mkdir /docker-entrypoint-initdb.d && \
+# mkdir /scripts/pre-exec.d && \
+# mkdir /scripts/pre-init.d
+RUN 
+
+COPY ./tools/run.sh /tmp/run.sh
+RUN chmod +x /tmp/run.sh
 
 # volume will be in the docker compose file
 # VOLUME ["/var/lib/mysql"]
@@ -21,5 +23,5 @@ RUN mkdir /docker-entrypoint-initdb.d && \
 # This doesnt do anything just for docs. the ports are exposed in the docker-compose file
 EXPOSE 3306
 
-ENTRYPOINT ["/scripts/run.sh"]
+ENTRYPOINT ["sh","/tmp/run.sh"]
 

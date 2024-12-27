@@ -1,10 +1,26 @@
-all:
-	# if these directories do not exist, create them
-	mkdir -p ~/data/wd-data
-	mkdir -p ~/data/wd-files
+up:
+	./setup.sh
 	# -d is for detacher returning the terminal to the user
 	# --remove-orphans is for removing the orphaned containers when sigint is sent
-	cd srcs && docker compose up -d --remove-orphans
+	# build is for rebuilding the images - and d is for detacher
+	cd srcs && docker compose up  --remove-orphans --build
 
-clean:
-	cd srcs && docker compose down --remove-orphans
+down:
+	cd srcs && docker compose down --remove-orphans -v
+
+start:
+	cd srcs && docker compose start
+
+stop:
+	cd srcs && docker compose stop
+
+re: down up
+
+clean: down
+	# remove the directories - I need sudo because of permissions
+	sudo rm -rf ~/data
+
+ls:
+	cd srcs && docker compose ps
+
+.PHONY: up down start stop re clean ls

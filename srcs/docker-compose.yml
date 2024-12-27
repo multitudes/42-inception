@@ -25,8 +25,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - inception_network
-    ports:
-      - "3306:3306"
+    # ports:
+    #   - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     restart: on-failure
@@ -34,14 +34,18 @@ services:
   wordpress:
     build: ./requirements/wordpress
     environment:
-      WORDPRESS_DB_HOST: mariadb:3306
-      WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
-      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      DB_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
     networks:
       - inception_network
-    ports:
-      - "80:80"
+    # ports:
+    #   - "80:80"
     volumes:
       - wd-files:/var/www/html
     depends_on:
