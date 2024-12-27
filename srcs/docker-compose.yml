@@ -3,9 +3,7 @@ name: inception
 services:
 
   nginx:
-    container_name: nginx
     build: ./requirements/nginx
-    image:
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
@@ -19,7 +17,6 @@ services:
     restart: on-failure
 
   mariadb:
-    container_name: mariadb
     build: requirements/mariadb
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -35,7 +32,6 @@ services:
     restart: on-failure
 
   wordpress:
-    container_name: wordpress
     build: ./requirements/wordpress
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
@@ -48,7 +44,6 @@ services:
       - "80:80"
     volumes:
       - wd-files:/var/www/html
-    # command: echo "[WORDPRESS] I'm running ${COMPOSE_PROJECT_NAME}"
     depends_on:
       - mariadb
     restart: on-failure
