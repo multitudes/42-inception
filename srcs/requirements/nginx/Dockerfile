@@ -13,18 +13,17 @@ COPY	./tools/nginx.conf /etc/nginx/nginx.conf
 COPY	./tools/default.conf /etc/nginx/http.d/default.conf
 
 # openssl is used to generate a self-signed certificate
-ARG 	DOMAIN_NAME
 RUN 	openssl req -x509 -nodes -days 365 -newkey rsa:2048\
 		-keyout /etc/ssl/private/nginx-selfsigned.key\
 		-out /etc/ssl/certs/nginx-selfsigned.crt\
-		-subj "/C=DE/ST=IDF/L=BERLIN/O=42Network/OU=42BERLIN/CN=${DOMAIN_NAME:-localhost}"
+		-subj "/C=DE/ST=IDF/L=BERLIN/O=42Network/OU=42BERLIN/CN=lbrusa.42.de"
 
 RUN		adduser -D -g 'www' www &&\
 		chown -R www:www /run/nginx/ &&\
 		chown -R www:www /var/www/html/
 
 # Expose NGINX ports
-EXPOSE 443
+EXPOSE 443/tcp
 
 # start nginx running in the background
 CMD ["nginx", "-g", "daemon off;"]

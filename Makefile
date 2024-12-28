@@ -1,8 +1,8 @@
 up:
 	./setup.sh
-	# -d is for detacher returning the terminal to the user
-	# --remove-orphans is for removing the orphaned containers when sigint is sent
-	# build is for rebuilding the images - and d is for detacher
+	@# -d is for detacher returning the terminal to the user
+	@# --remove-orphans is for removing the orphaned containers when sigint is sent
+	@# build is for rebuilding the images - and d is for detacher
 	cd srcs && docker compose up  --remove-orphans --build
 
 down:
@@ -17,7 +17,7 @@ stop:
 re: down up
 
 clean: down
-	# remove the directories - I need sudo because of permissions
+	@# remove the directories - I need sudo because of permissions
 	sudo rm -rf ~/data
 
 ls:

@@ -4,8 +4,7 @@ services:
 
   nginx:
     build: ./requirements/nginx
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
+    env_file:       .env
     ports:
       - "443:443"
     volumes:
@@ -18,49 +17,33 @@ services:
 
   mariadb:
     build: requirements/mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file:       .env
     networks:
       - inception_network
-    # ports:
-    #   - "3306:3306"
+    ports:
+      - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     restart: on-failure
 
   wordpress:
     build: ./requirements/wordpress
-    environment:
-      DB_HOST: mariadb
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
-      DB_NAME: ${MYSQL_DATABASE}
-      NGINX_HOST: ${NGINX_HOST}
-      DOMAIN_NAME: ${DOMAIN_NAME}
-      WP_PATH: ${WP_PATH}
-      WP_TITLE: ${WP_TITLE}
-      WP_ADMIN_USER: ${WP_ADMIN_USER}
-      WP_ADMIN_PASS: ${WP_ADMIN_PASS}
-      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
-      WP_USER: ${WP_USER}
-      WP_USER_PASS: ${WP_USER_PASS}
-      WP_USER_EMAIL: ${WP_USER_EMAIL}
+    env_file:      .env
     networks:
       - inception_network
-    # ports:
-    #   - "80:80"
     volumes:
       - wd-files:/var/www/html
     depends_on:
       - mariadb
     restart: on-failure
+
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports:
+      - 8080:8080
+    networks:
+      - inception_network
 
 
 volumes:

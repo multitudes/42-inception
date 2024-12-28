@@ -3,13 +3,23 @@
 echo "[WP config] Configuring WordPress..."
 
 echo "[WP config] Waiting for MariaDB..."
-while ! mysql -h${DB_HOST} -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} &>/dev/null;
+while ! mysql -h${DB_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} &>/dev/null;
 do
 	echo "[WP config] DEBUG - DB_HOST: ${DB_HOST}"
-	echo "[WP config] DEBUG - DB_USER: ${DB_USER}"
-	echo "[WP config] DEBUG - DB_PASS: ${DB_PASSWORD}"
-	echo "[WP config] DEBUG - DB_NAME: ${DB_NAME}"
+	echo "[WP config] DEBUG - MYSQL_USER: ${MYSQL_USER}"
+	echo "[WP config] DEBUG - MYSQL_PASSWORD: ${MYSQL_PASSWORD}"
+	echo "[WP config] DEBUG - MYSQL_DATABASE: ${MYSQL_DATABASE}"
 	echo "[WP config] DEBUG - NGINX_HOST: ${NGINX_HOST}"
+	echo "[WP config] DEBUG - WP_TITLE: ${WP_TITLE}"
+	echo "[WP config] DEBUG - WP_ADMIN_USER: ${WP_ADMIN_USER}"
+	echo "[WP config] DEBUG - WP_ADMIN_PASS: ${WP_ADMIN_PASS}"
+	echo "[WP config] DEBUG - WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}"
+	echo "[WP config] DEBUG - WP_USER: ${WP_USER}"
+	echo "[WP config] DEBUG - WP_USER_EMAIL: ${WP_USER_EMAIL}"
+	echo "[WP config] DEBUG - WP_USER_PASS: ${WP_USER_PASS}"
+	echo "[WP config] DEBUG - WP_PATH: ${WP_PATH}"
+	echo "[WP config] DEBUG - WP_THEME: ${WP_THEME}"
+
 	# echo "[WP config] MariaDB not accessible. Retrying in 3 seconds..."
     sleep 3
 done
@@ -27,7 +37,7 @@ else
 	echo "[WP config] Downloading WordPress..."
 	wp-cli.phar core download --allow-root
 	echo "[WP config] Creating wp-config.php..."
-	wp-cli.phar config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASSWORD} --dbhost=${DB_HOST} --path=${WP_PATH} --allow-root
+	wp-cli.phar config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${DB_HOST} --path=${WP_PATH} --allow-root
 	echo "[WP config] Installing WordPress core..."
 	wp-cli.phar core install --url=${NGINX_HOST}/wordpress --title=${WP_TITLE} --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASS} --admin_email=${WP_ADMIN_EMAIL} --path=${WP_PATH} --allow-root
 	echo "[WP config] Creating WordPress default user..."
