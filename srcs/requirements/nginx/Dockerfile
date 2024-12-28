@@ -18,6 +18,7 @@ RUN 	openssl req -x509 -nodes -days 365 -newkey rsa:2048\
 		-out /etc/ssl/certs/nginx-selfsigned.crt\
 		-subj "/C=DE/ST=IDF/L=BERLIN/O=42Network/OU=42BERLIN/CN=lbrusa.42.de"
 
+# create a user www and change the ownership of the files in the /run/nginx/ directory
 RUN		adduser -D -g 'www' www &&\
 		chown -R www:www /run/nginx/ &&\
 		chown -R www:www /var/www/html/

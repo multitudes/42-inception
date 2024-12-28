@@ -13,7 +13,6 @@ mkdir -p ~/data/wd-data
 mkdir -p ~/data/wd-files
 ```
 
-
 ## links
 https://hub.docker.com/_/wordpress  
 

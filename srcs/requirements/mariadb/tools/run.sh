@@ -67,8 +67,6 @@ exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networkin
 
 # #!/bin/sh
 
-
-
 # # Set MYSQL_ variables based on MARIADB_ variables or secrets if MYSQL_ is not set
 # for var in ROOT_PASSWORD DATABASE USER PASSWORD CHARSET COLLATION; do
 #     eval mysql_var="\$MYSQL_${var}"
