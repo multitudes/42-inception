@@ -3,7 +3,7 @@ name: inception
 services:
 
   nginx:
-    build: ./requirements/nginx
+    build: requirements/nginx
     env_file:       .env
     ports:
       - "443:443"
@@ -20,14 +20,12 @@ services:
     env_file:       .env
     networks:
       - inception_network
-    ports:
-      - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     restart: on-failure
 
   wordpress:
-    build: ./requirements/wordpress
+    build: requirements/wordpress
     env_file:      .env
     networks:
       - inception_network
@@ -38,12 +36,17 @@ services:
     restart: on-failure
 
   adminer:
-    image: adminer
-    restart: on-failure
+    # image: adminer
+    build: requirements/adminer
     ports:
       - 8080:8080
+    expose:
+      - 9000
     networks:
       - inception_network
+    depends_on:
+      - wordpress
+    restart: on-failure
 
 
 volumes:

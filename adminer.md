@@ -15,7 +15,7 @@ Database: MYSQL_DATABASE
 
   adminer:
     image: adminer
-    restart: always
+    restart: on-failure
     ports:
       - 8080:8080
     networks:
@@ -24,9 +24,25 @@ Database: MYSQL_DATABASE
 
 Also, I can write a docker file for adminer and build it from alpine like I did for the other containers.
 
-```Dockerfile
-FROM alpine:3.20
+```yaml
+  adminer:
+    build: requirements/adminer
+    ports:
+      - 8080:8080
+    expose:
+      - 9000
+    networks:
+      - inception_network
+    depends_on:
+      - wordpress
+    restart: on-failure
 
+```
+with its own dockerfile
+```dockerfile
+
+
+```
 
 
 
@@ -160,3 +176,10 @@ DROP TABLE test_table;
  file.
 - **Execute SQL Commands**: Use the provided SQL commands to test your MariaDB setup.
 - **Verify Results**: Ensure that the commands execute successfully and return the expected results.
+
+
+## Links
+https://github.com/vrana/adminer  
+
+btw adminer is deprecated as mentioned on the docker page:  
+https://hub.docker.com/_/adminer
