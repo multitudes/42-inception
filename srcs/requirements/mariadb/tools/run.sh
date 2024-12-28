@@ -1,4 +1,20 @@
 #!/bin/sh
+
+# ## This script is based on the official MySQL Docker image
+# ## alpine-mariadb
+# ## for more info visit:
+# ## https://github.com/yobasystems/alpine-mariadb/tree/master/alpine-mariadb-aarch64
+
+# # Function to read secret from file
+# read_secret() {
+#     local secret_file="$1"
+#     if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
+#         cat "$secret_file"
+#     else
+#         echo ""
+#     fi
+# }
+
 echo "[DB config] Configuring MariaDB..."
 
 if [ ! -d "/run/mysqld" ]; then
@@ -16,27 +32,29 @@ else
 	mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --user=mysql --rpm > /dev/null
 	echo "[DB config] MySQL Data Directory done."
 
-	echo "[DB config] Configuring MySQL..."
-	TMP=/tmp/.tmpfile
+	tfile=$(mktemp)
+	if [ ! -f "$tfile" ]; then
+		echo "Failed to create temporary file"
+		exit 1
+	fi
 
-	echo "USE mysql;" > ${TMP}
-	echo "FLUSH PRIVILEGES;" >> ${TMP}
-	echo "DELETE FROM mysql.user WHERE User='';" >> ${TMP}
-	echo "DROP DATABASE IF EXISTS test;" >> ${TMP}
-	echo "DELETE FROM mysql.db WHERE Db='test';" >> ${TMP}
-	echo "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" >> ${TMP}
-	echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';" >> ${TMP}
-	echo "CREATE DATABASE ${MYSQL_DATABASE};" >> ${TMP}
-	echo "CREATE USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';" >> ${TMP}
-	echo "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';" >> ${TMP}
-	echo "FLUSH PRIVILEGES;" >> ${TMP}
+	cat << EOF > $tfile
+USE mysql;
+FLUSH PRIVILEGES;
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+CREATE DATABASE ${MYSQL_DATABASE};
+CREATE USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+FLUSH PRIVILEGES;
+EOF
 
-	# Alpine does not come with service or rc-service,
-	# so we cannot use: service mysql start
-	# We might be able to install with: apk add openrc
-	# But we can also manually start and configure the mysql daemon:
-	/usr/bin/mysqld --user=mysql --bootstrap < ${TMP}
-	rm -f ${TMP}
+	/usr/bin/mysqld --user=mysql --bootstrap < $tfile
+	rm -f $tfile
+
 	echo "[DB config] MySQL configuration done."
 fi
 
@@ -49,20 +67,7 @@ exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networkin
 
 # #!/bin/sh
 
-# ## This script is based on the official MySQL Docker image
-# ## alpine-mariadb
-# ## for more info visit:
-# ## https://github.com/yobasystems/alpine-mariadb/tree/master/alpine-mariadb-aarch64
 
-# # Function to read secret from file
-# read_secret() {
-#     local secret_file="$1"
-#     if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
-#         cat "$secret_file"
-#     else
-#         echo ""
-#     fi
-# }
 
 # # Set MYSQL_ variables based on MARIADB_ variables or secrets if MYSQL_ is not set
 # for var in ROOT_PASSWORD DATABASE USER PASSWORD CHARSET COLLATION; do
