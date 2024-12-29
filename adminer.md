@@ -182,4 +182,7 @@ DROP TABLE test_table;
 https://github.com/vrana/adminer  
 
 btw adminer is deprecated as mentioned on the docker page:  
-https://hub.docker.com/_/adminer
+https://hub.docker.com/_/adminer  
+
+the $aH bug is still open:
+https://sourceforge.net/p/adminer/bugs-and-features/831/  
