@@ -10,7 +10,6 @@ RUN mkdir -p /var/www/html/
 
 # copy conf file
 COPY	./tools/nginx.conf /etc/nginx/nginx.conf
-COPY	./tools/default.conf /etc/nginx/http.d/default.conf
 
 # openssl is used to generate a self-signed certificate
 RUN 	openssl req -x509 -nodes -days 365 -newkey rsa:2048\

@@ -40,8 +40,6 @@ services:
     build: requirements/adminer
     ports:
       - 8080:8080
-    expose:
-      - 9000
     networks:
       - inception_network
     depends_on:
