@@ -10,11 +10,10 @@ RUN chmod +x /tmp/conf.sh
 RUN /tmp/conf.sh
 
 # Create a user www and change the ownership of the Redis configuration directory
-# RUN adduser -D -g 'www' www && \
-# 	mkdir -p /etc/redis && \
-# 	chown -R www:www /etc/redis
-
-	
-# USER www
+RUN adduser -D -g 'www' www && \
+mkdir -p /var/lib/redis && \
+mkdir -p /etc/redis && \
+chown -R www:www /var/lib/redis && \
+chown -R www:www /etc/redis
 
 ENTRYPOINT  [ "redis-server", "/etc/redis/redis.conf" ]

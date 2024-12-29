@@ -23,7 +23,6 @@ RUN adduser -D -g 'www' www && \
 COPY 	tools/configure-wordpress.sh /tmp/configure-wordpress.sh
 RUN		chmod +x /tmp/configure-wordpress.sh
 
-
 WORKDIR /var/www/html
 
 ENTRYPOINT	[ "sh", "/tmp/configure-wordpress.sh" ]

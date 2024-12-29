@@ -27,7 +27,7 @@ appendonly yes
 protected-mode no
 EOF
 
-# chown www:www /etc/redis/redis.conf
-# chmod 644 /etc/redis/redis.conf
+chown www:www /etc/redis/redis.conf
+chmod 644 /etc/redis/redis.conf
 
 echo "[Redis config] Starting Redis server on port 6379."

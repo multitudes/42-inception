@@ -63,6 +63,8 @@ else
 	su-exec  www  wp plugin install redis-cache --activate --allow-root
 	su-exec  www  wp config set WP_REDIS_HOST redis --allow-root
 	su-exec  www  wp config set WP_REDIS_PORT 6379 --raw --allow-root
+	su-exec  www  wp config set WP_REDIS_DATABASE 0 --raw --allow-root
+	
 	su-exec  www  wp redis enable --allow-root
 	su-exec  www  wp redis status
 
@@ -71,6 +73,10 @@ else
 fi
 
 chown -R www:www /var/www/html
+
+# Make wp-content writable by PHP
+chown -R www:www /var/www/html/wp-content
+chmod -R 775 /var/www/html/wp-content
 
 echo "[WP config] Starting WordPress fastCGI on port 9000."
 exec /usr/sbin/php-fpm82 -F -R
