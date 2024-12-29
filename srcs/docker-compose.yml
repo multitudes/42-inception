@@ -33,6 +33,7 @@ services:
       - wd-files:/var/www/html
     depends_on:
       - mariadb
+      - redis
     restart: on-failure
 
   adminer:
@@ -46,6 +47,11 @@ services:
       - wordpress
     restart: on-failure
 
+  redis:
+    build: requirements/redis
+    networks:
+      - inception_network
+    restart: on-failure
 
 volumes:
   db-data:

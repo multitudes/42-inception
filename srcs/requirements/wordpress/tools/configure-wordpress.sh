@@ -1,5 +1,12 @@
 #!/bin/sh
 
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&\
+chmod +x wp-cli.phar &&\
+mv wp-cli.phar /usr/local/bin/wp
+
+# make sure the files are accessible on the volume
+chmod -R 755 /var/www/html
+
 echo "[WP config] Configuring WordPress..."
 
 echo "[WP config] Waiting for MariaDB..."
@@ -32,33 +39,38 @@ then
 	echo "[WP config] WordPress already configured."
 else
 	echo "[WP config] Configuring WordPress..."
-	cd ${WP_PATH}
-	wp core download --allow-root
-	wp config create \
+
+	su-exec  www  wp core download --allow-root
+	su-exec  www  wp config create \
 		--dbname=${MYSQL_DATABASE} \
 		--dbuser=${MYSQL_USER} \
 		--dbpass=${MYSQL_PASSWORD} \
 		--dbhost=mariadb:3306 --allow-root
-	wp core install \
+	su-exec  www  wp core install \
 		--url=${DOMAIN_NAME} \
 		--title=${WP_TITLE} \
 		--admin_user=${WP_ADMIN_USER} \
 		--admin_password=${WP_ADMIN_PASS} \
 		--admin_email=${WP_ADMIN_EMAIL} --allow-root
-	wp user create ${WP_USER_NAME} ${WP_USER_EMAIL} \
+	su-exec  www  wp user create ${WP_USER_NAME} ${WP_USER_EMAIL} \
 		--user_pass=${WP_USER_PASS} \
 		--role=${WP_USER_ROLE} --allow-root
 
-	wp theme install ${WP_THEME} --activate --allow-root
+	# install theme
+	su-exec www  wp theme install ${WP_THEME} --activate --allow-root
 
-	wp plugin install redis-cache --activate --allow-root
-	wp config set WP_REDIS_HOST redis --allow-root
-	wp config set WP_REDIS_PORT 6379 --raw --allow-root
-	wp redis enable --allow-root
+	# redis cache
+	su-exec  www  wp plugin install redis-cache --activate --allow-root
+	su-exec  www  wp config set WP_REDIS_HOST redis --allow-root
+	su-exec  www  wp config set WP_REDIS_PORT 6379 --raw --allow-root
+	su-exec  www  wp redis enable --allow-root
+	su-exec  www  wp redis status
 
+
+	mkdir -p /run/php
 fi
 
-
+chown -R www:www /var/www/html
 
 echo "[WP config] Starting WordPress fastCGI on port 9000."
 exec /usr/sbin/php-fpm82 -F -R

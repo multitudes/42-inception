@@ -1,6 +1,6 @@
 # install docker on virtual machine
 
-Yes, you need to install Docker on your virtual machine to create and run Docker containers. Here are the steps to install Docker and create a Dockerfile for NGINX with TLSv1.2 or TLSv1.3 only:
+You need to install Docker on your virtual machine to create and run Docker containers. Here are the steps to install Docker and create a Dockerfile for NGINX with TLSv1.2 or TLSv1.3 only:
 
 ### Install Docker on Debian
 
