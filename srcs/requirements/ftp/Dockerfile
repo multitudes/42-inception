@@ -6,7 +6,7 @@ RUN apk add --no-cache vsftpd
 
 # exec the configuration script
 COPY tools/conf.sh /tmp/conf.sh
+COPY tools/vsftpd.conf /tmp/vsftpd.conf
 RUN chmod +x /tmp/conf.sh 
-RUN /tmp/conf.sh
 
-ENTRYPOINT  [ "vsftpd", "/etc/vsftpd/vsftpd.conf" ]
+ENTRYPOINT  [ "/tmp/conf.sh" ]

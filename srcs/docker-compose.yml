@@ -53,6 +53,19 @@ services:
       - inception_network
     restart: on-failure
 
+  ftp:
+    build: requirements/ftp
+    env_file:       .env
+    ports:
+      - "20:20"	
+      - "21:21"
+      - "30000-30009:30000-30009"
+    networks:
+      - inception_network
+    volumes:
+      - wd-files:/var/www/html
+    restart: on-failure
+
 volumes:
   db-data:
     driver: local

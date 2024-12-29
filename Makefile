@@ -14,6 +14,9 @@ start:
 stop:
 	cd srcs && docker compose stop
 
+logs:
+	cd srcs && docker compose logs -f	
+
 re: down up
 
 clean: down
