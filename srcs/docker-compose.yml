@@ -57,9 +57,8 @@ services:
     build: requirements/ftp
     env_file:       .env
     ports:
-      - "20:20"	
       - "21:21"
-      - "30000-30009:30000-30009"
+      - 30000-30009:30000-30009
     networks:
       - inception_network
     volumes:

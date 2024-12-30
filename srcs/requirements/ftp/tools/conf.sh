@@ -24,7 +24,7 @@ echo "[vsftpd config] Configuring vsftpd..."
 # # log upploads and downloads
 # xferlog_enable=YES
 # pasv_enable=YES
-# pasv_address=${INCEPTION_IP}
+# pasv_address=${IP_ADDR}
 # pasv_min_port=30000
 # pasv_max_port=30009
 # local_root=/home/${FTP_USER}
