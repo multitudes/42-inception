@@ -37,6 +37,7 @@ services:
     restart: on-failure
 
   adminer:
+    # image: adminer
     build: requirements/adminer
     ports:
       - 8080:8080
@@ -54,7 +55,7 @@ services:
 
   ftp:
     build: requirements/ftp
-    env_file:       .env
+    env_file: .env
     environment:
       - IP_ADDR=${IP_ADDR}
     ports:
@@ -67,19 +68,35 @@ services:
     restart: on-failure
 
   portainer:
-    container_name: portainer
     build: ./requirements/portainer/
+    env_file: .
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - prt:/data
-    restart: always
+      - prt-files:/data
+    restart: on-failure
     depends_on:
       - wordpress
     networks:
       - inception_network
     ports:
       - "9443:9443"
-      
+
+#   gatsby:
+#     build: ./requirements/gatsby
+#     volumes:
+#       - gatsby-data:/usr/src/app/public
+#       - ~/my-portfolio:/usr/src/app
+#     ports:
+#       - "8001:8001"
+#     environment:
+#       NODE_ENV: development
+#       CHOKIDAR_USEPOLLING: "1"
+#       GATSBY_WEBPACK_PUBLICPATH: "/"
+#     command: gatsby develop -H 0.0.0.0
+#     networks:
+#       - inception_network
+#     restart: on-failure
+
 volumes:
   db-data:
     driver: local
@@ -93,13 +110,21 @@ volumes:
       type: none
       device: ~/data/wd-files
       o: bind
-  prt:
+
+  # bonus
+  prt-files:
     name: prt
     driver: local
     driver_opts:
       type: none
-      o: bind
       device: ~/data/portainer
+      o: bind
+#   gatsby-data:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ~/data/gatsby-data
+#       o: bind
 
 networks:
   inception_network:

@@ -43,3 +43,35 @@ Portainer is an excellent choice for managing your Docker environment, especiall
 
 ## in docker compose
 ```yaml
+  portainer:
+    build: ./requirements/portainer/
+    env_file: .env
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - prt_files:/data
+    restart: on-failure
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+    ports:
+      - "9443:9443"
+```
+
+
+## ports
+Exposing only port 9443 for Portainer is generally the recommended and secure approach. 
+
+Here's why:
+
+* **Security:**
+    - **HTTPS (port 9443):** Encrypts all communication between your browser and Portainer, protecting sensitive information like usernames, passwords, and container configurations.
+    - **Reduced Attack Surface:** Exposing only the HTTPS port minimizes the potential attack surface by removing unnecessary open ports.
+
+* **Intended Use:**
+    - Portainer is primarily designed to be accessed securely over HTTPS. 
+
+**Regarding Port 8000:**
+
+- Port 8000 is typically used for internal communication and may not be necessary for typical usage. 
+

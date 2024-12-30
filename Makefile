@@ -8,7 +8,7 @@ up:
 	@# -d is for detacher returning the terminal to the user
 	@# --remove-orphans is for removing the orphaned containers when sigint is sent
 	@# build is for rebuilding the images - and d is for detacher
-	cd srcs && IP_ADDR=$(get_ip) docker compose up  --remove-orphans --build
+	cd srcs && IP_ADDR=$(get_ip) docker compose up --remove-orphans --build
 
 down:
 	cd srcs && docker compose down --remove-orphans -v
