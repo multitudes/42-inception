@@ -49,22 +49,16 @@ if [ ! -f "/etc/vsftpd/vsftpd.conf.bak" ]; then
 
     # Debugging: Print the contents of vsftpd.userlist
     cat /etc/vsftpd.userlist
+	echo "[vsftpd config] vsftpd configuration complete."
 fi
 
 # debug
 echo "FTP_USER=${FTP_USER}"
 echo "FTP_PASS=${FTP_PASS}"
+echo "FTP ip=${IP_ADDR}"
 
 echo "FTP started on :21"
 /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf
 
 
-# # create a user for the ftp server
-# adduser -D -h /home/${FTP_USER} "${FTP_USER}"
-# echo "${FTP_USER}:${FTP_PASS}" | chpasswd
 
-# # restart the service 
-# vsftpd restart
-
-
-# echo "[vsftpd config] vsftpd configuration complete."
