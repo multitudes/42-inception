@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# I need this otherwise php will not be found
+ln -s /usr/bin/php82 /usr/bin/php 
+
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&\
 chmod +x wp-cli.phar &&\
 mv wp-cli.phar /usr/local/bin/wp
@@ -67,7 +70,6 @@ else
 	
 	su-exec  www  wp redis enable --allow-root
 	su-exec  www  wp redis status
-
 
 	mkdir -p /run/php
 fi

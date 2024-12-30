@@ -52,6 +52,9 @@ if [ ! -f "/etc/vsftpd/vsftpd.conf.bak" ]; then
 	echo "[vsftpd config] vsftpd configuration complete."
 fi
 
+# Replace placeholder with actual IP address in vsftpd.conf
+sed -i "s/\${IP_ADDR}/$IP_ADDR/g" /etc/vsftpd/vsftpd.conf
+
 # debug
 echo "FTP_USER=${FTP_USER}"
 echo "FTP_PASS=${FTP_PASS}"
