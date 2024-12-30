@@ -2,7 +2,7 @@ FROM alpine:3.20
 
 RUN apk update && apk upgrade
 
-RUN apk add --no-cache vsftpd
+RUN apk add --no-cache vsftpd && rm -rf /var/cache/apk
 
 # exec the configuration script
 COPY tools/conf.sh /tmp/conf.sh

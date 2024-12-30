@@ -4,6 +4,7 @@ RUN apk update && apk upgrade
 
 RUN apk add --no-cache wget && \
 	apk add php82 php82-mysqli php82-session && \
+	rm -rf /var/cache/apk && \
 	ln -s /usr/bin/php82 /usr/bin/php 
 
 WORKDIR /var/www/html
