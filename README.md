@@ -36,13 +36,73 @@ First we create a new virtual machine with VirtualBox and install Debian.
 ```bash
 ssh -p 2222 lbrusa@localhost
 ```
-- In my shared directory I have my srcs folder with the project files.  
-I cd into it with
+- In my shared directory I have my srcs folder with the project files, and a Makefile at the root of the project.  
+I cd into it with:
 ```bash
-cd /mnt/shared_folder/srcs/requirements/nginx/
+
+cd /mnt/shared_folder/
 ```
 
+I can also check the available memory with:
+```bash
+$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+udev            3.9G     0  3.9G   0% /dev
+tmpfs           798M  1.2M  797M   1% /run
+/dev/sda1        50G   20G   28G  42% /
+tmpfs           3.9G  8.0K  3.9G   1% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           798M   72K  797M   1% /run/user/1000
+```
+
+or also with:
+```bash
+free -m
+```
+to check the available memory.
+
+## The shared folder
+The shared folder is the one that I have shared with the virtual machine in the settings and it is mapped to my `~/data` folder on the host machine.
+
+Playing with docker and docker-compose I can start the containers with the following commands, either with just docker:
+
+```bash
+cd srcs/nginx
+docker build -t nginx .
+docker run --rm -d -p 443:443 --name nginx-container nginx
+```
+The above can be a first step to troubleshooting the nginx container first before to start the docker-compose file.
+When I am confident that I did not make any mistakes I can start the docker-compose file with the following command:
+```bash
+docker compose up --build
+```
+The build flag is used to build or rebuild the Docker images in my docker-compose.yml file. Also I use the --remove-orphans flag in development to remove orphaned containers, for example when I stop the containers with ctrl-c. 
+
+But for convenience I will add the docker compose commands to my makefile.
+
+There are two things I need to set up first. I need to create the directories (if they dont already exist) for the volumes which will be in the shared data folder. I later added a command to get the ip address from the host because needed for the ftp server. 
+
+
 ## Makefile
+Makefiles handle variable differently than bash.
+example:
+
+- **`$(shell ...)`**: This is a Makefile function that executes the command inside the parentheses and captures its output.
+
+```makefile
+get_ip = $(shell hostname -I | cut -d' ' -f1)
+```
+
+By using `$(shell ...)`, you can execute shell commands within your Makefile and capture their output without needing to escape the `$` character.
+
+But here in my makefile fclean target:
+```makefile
+fclean: clean
+    @# remove the images
+    docker rmi -f $$(docker images -q)
+```
+$$: Escapes the $ character in a Makefile so that it is passed correctly to the shell.
+$$(docker images -q): Executes docker images -q in the shell to get the list of image IDs.
 
 I will use the makefile to start the docker-compose file and restart the containers.
 - The `docker compose up --build` command is used to build or rebuild the Docker images specified in your `docker-compose.yml` file before starting the containers. This is useful when you have made changes to the Dockerfiles or the context directories and want to ensure that the latest changes are included in the images.

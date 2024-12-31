@@ -37,7 +37,7 @@ services:
     restart: on-failure
 
   adminer:
-    build: requirements/adminer
+    build: requirements/bonus/adminer
     ports:
       - 8080:8080
     networks:
@@ -47,13 +47,13 @@ services:
     restart: on-failure
 
   redis:
-    build: requirements/redis
+    build: requirements/bonus/redis
     networks:
       - inception_network
     restart: on-failure
 
   ftp:
-    build: requirements/ftp
+    build: requirements/bonus/ftp
     env_file:       .env
     environment:
       - IP_ADDR=${IP_ADDR}
@@ -67,8 +67,7 @@ services:
     restart: on-failure
 
   portainer:
-    container_name: portainer
-    build: ./requirements/portainer/
+    build: ./requirements/bonus/portainer/
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - prt:/data
@@ -79,7 +78,7 @@ services:
       - inception_network
     ports:
       - "9443:9443"
-      
+
 volumes:
   db-data:
     driver: local
@@ -103,4 +102,5 @@ volumes:
 
 networks:
   inception_network:
+    name: inception_network
     driver: bridge

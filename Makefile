@@ -32,6 +32,10 @@ clean: down
 	@# remove the directories - I need sudo because of permissions
 	sudo rm -rf ~/data
 
+fclean : clean
+	@# remove the images
+	./cleanup.sh
+	
 ls:
 	cd srcs && docker compose ps
 

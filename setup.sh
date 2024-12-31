@@ -10,4 +10,3 @@ fi
 mkdir -p ~/data/db-data
 mkdir -p ~/data/wd-files
 mkdir -p ~/data/portainer
-# mkdir -p ~/data/gatsby-data

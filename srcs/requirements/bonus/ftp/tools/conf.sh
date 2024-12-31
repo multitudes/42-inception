@@ -31,6 +31,15 @@ echo "[vsftpd config] Configuring vsftpd..."
 # secure_chroot_dir=/var/run/vsftpd/empty
 # EOF
 
+
+# # Function to get the IP address of the running FTP container
+# get_ftp_ip() {
+#     docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -qf "name=ftp")
+# }
+
+# # Get the IP address of the FTP container
+# IP_ADDR=$(get_ftp_ip)
+
 # If the backup file does not exist, create it and configure the FTP server
 if [ ! -f "/etc/vsftpd/vsftpd.conf.bak" ]; then
 

@@ -19,3 +19,13 @@ install gatsby
 ```bash
 sudo npm install -g gatsby-cli
 ```
+
+ok this was hard and i ran out of space on my vm.
+
+but at the end i managed to get it running with the following commands:
+
+```bash
+ docker build -t gat .
+ docker run --rm -it -p 8001:8001 -v ~/data/gatsby-data:/usr/src/app gat
+ ```
+ in any case i got the error that i had to update to node 18 at least and then I ran out of space. Also it doesnt work on a shared virtual machine volume, so this approach is not valid, I then decided to use something else.
