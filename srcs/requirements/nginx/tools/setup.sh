@@ -20,4 +20,4 @@ chown -R www:www /var/www/html/
 
 # Start Nginx
 echo "[nginx config] Starting Nginx..."
-nginx -g "daemon off;"
+exec nginx -g "daemon off;"
