@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# Configure PHP-fpm to listen on internal inception network port 9000
+sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php82/php-fpm.d/www.conf
+
+# Create a user www and change the ownership of the files in the /var/www/html directory
+adduser -D -g 'www' www && \
+mkdir -p /var/www/html && \
+chown -R www:www /var/www/html
+
 # I need this otherwise php will not be found
 ln -s /usr/bin/php82 /usr/bin/php 
 
@@ -20,7 +28,7 @@ do
 	echo "[WP config] DEBUG - MYSQL_USER: ${MYSQL_USER}"
 	echo "[WP config] DEBUG - MYSQL_PASSWORD: ${MYSQL_PASSWORD}"
 	echo "[WP config] DEBUG - MYSQL_DATABASE: ${MYSQL_DATABASE}"
-	echo "[WP config] DEBUG - NGINX_HOST: ${NGINX_HOST}"
+	echo "[WP config] DEBUG - DOMAIN_NAME: ${DOMAIN_NAME}"
 	echo "[WP config] DEBUG - WP_TITLE: ${WP_TITLE}"
 	echo "[WP config] DEBUG - WP_ADMIN_USER: ${WP_ADMIN_USER}"
 	echo "[WP config] DEBUG - WP_ADMIN_PASS: ${WP_ADMIN_PASS}"

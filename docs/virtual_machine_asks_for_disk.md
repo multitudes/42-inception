@@ -25,3 +25,25 @@ deb-src http://deb.debian.org/debian/ bullseye-updates main contrib non-free
 ```
 Save the file and exit the text editor.
 This should allow you to install the necessary packages without needing the original Debian installation media.
+
+## time zones
+It is important to have the correct time for sync between the host and the virtual machine.
+The error message indicates that the timezone `Germany/Berlin` is not recognized. The correct timezone for Berlin is `Europe/Berlin`.
+
+### Correct Command
+
+To set the timezone to Berlin, use the following command:
+
+```sh
+sudo timedatectl set-timezone Europe/Berlin
+```
+
+### Verify the Change
+
+After setting the timezone, you can verify the change by running:
+
+```sh
+timedatectl
+```
+
+This command will display the current system time, timezone, and other related information.

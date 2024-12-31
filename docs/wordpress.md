@@ -63,7 +63,7 @@ You can set the `WP_USER_ROLE` environment variable in your `.env` file and use 
 ```properties
 DOMAIN_NAME=lbrusa.42.de
 DB_HOST=mariadb
-NGINX_HOST=lbrusa.42.de
+DOMAIN_NAME=lbrusa.42.de
 
 # MySQL
 MYSQL_ROOT_PASSWORD=rut
@@ -105,7 +105,7 @@ while ! mysql -h${DB_HOST} -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} &>/dev/null;
     echo "[WP config] DEBUG - DB_USER: ${DB_USER}"
     echo "[WP config] DEBUG - DB_PASS: ${DB_PASSWORD}"
     echo "[WP config] DEBUG - DB_NAME: ${DB_NAME}"
-    echo "[WP config] DEBUG - NGINX_HOST: ${NGINX_HOST}"
+    echo "[WP config] DEBUG - DOMAIN_NAME: ${DOMAIN_NAME}"
     echo "[WP config] DEBUG - WP_TITLE: ${WP_TITLE}"
     echo "[WP config] DEBUG - WP_ADMIN_USER: ${WP_ADMIN_USER}"
     echo "[WP config] DEBUG - WP_ADMIN_PASS: ${WP_ADMIN_PASS}"
@@ -132,7 +132,7 @@ else
     echo "[WP config] Creating wp-config.php..."
     wp-cli.phar config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASSWORD} --dbhost=${DB_HOST} --path=${WP_PATH} --allow-root
     echo "[WP config] Installing WordPress core..."
-    wp-cli.phar core install --url=${NGINX_HOST}/wordpress --title=${WP_TITLE} --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASS} --admin_email=${WP_ADMIN_EMAIL} --path=${WP_PATH} --allow-root
+    wp-cli.phar core install --url=${DOMAIN_NAME}/wordpress --title=${WP_TITLE} --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASS} --admin_email=${WP_ADMIN_EMAIL} --path=${WP_PATH} --allow-root
     echo "[WP config] Creating WordPress default user..."
     wp-cli.phar user create ${WP_USER} ${WP_USER_EMAIL} --user_pass=${WP_USER_PASS} --role=${WP_USER_ROLE} --path=${WP_PATH} --allow-root
     echo "[WP config] Installing WordPress theme..."

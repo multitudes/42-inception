@@ -8,7 +8,7 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache openssl nginx gettext && rm -rf /var/cache/apk
 
 # copy conf file and setup script
-COPY ./tools/nginx.conf /etc/nginx/nginx.conf
+COPY ./tools/nginx.conf /etc/nginx/nginx.conf.template
 COPY ./tools/setup.sh /tmp/setup.sh
 
 RUN chmod +x /tmp/setup.sh

@@ -2,8 +2,15 @@
 
 echo "[nginx config] Configuring Nginx..."
 
+# Replace placeholders with environment variable values
+envsubst '$DOMAIN_NAME' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+# echo "[DEBUG] domain name ${DOMAIN_NAME}"
+# to debug
+cat /etc/nginx/nginx.conf
+
+# Create a directory for the website
 mkdir -p /var/www/html/
-echo "[DEBUG] domain name ${DOMAIN_NAME}"
+
 
 echo "creating certificates" 
 # openssl is used to generate a self-signed certificate
