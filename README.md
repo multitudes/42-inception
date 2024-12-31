@@ -207,7 +207,12 @@ In my root directory I have a Makefile which creates the directories to be used 
 For more info about how a docker compose file look at the [docker-compose.md](docker-compose.md) file.
 The docker-compose file is in the root directory and it is used to define and run multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the services from your configuration.
 
+
+## The PID 1 
+When using a script to start the services in the container, it is good practice to ensure that the script is the PID 1 process. This is because the PID 1 process is responsible for reaping zombie processes and handling signals. If the script is not the PID 1 process, it may not receive signals correctly and may not handle them as expected.
+
 ## My containers
+
 I have 3 containers in this project two volumes	and a network.
 
 Each container has its own Dockerfile and the docker-compose file is used to build the images and run the containers.

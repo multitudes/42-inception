@@ -23,21 +23,26 @@ if [ ! -d "/run/mysqld" ]; then
 	chown -R mysql:mysql /run/mysqld
 fi
 
+# check if the mysql data directory is already configured
 if [ -d "/var/lib/mysql/mysql" ]
 then
 	echo "[DB config] MariaDB already configured."
 else
 	echo "[DB config] Installing MySQL Data Directory..."
+	#change ownership of mysql data directory
 	chown -R mysql:mysql /var/lib/mysql
+	# initialize MySQL data directory
 	mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --user=mysql --rpm > /dev/null
 	echo "[DB config] MySQL Data Directory done."
 
+	#create temporary file
 	tfile=$(mktemp)
 	if [ ! -f "$tfile" ]; then
 		echo "Failed to create temporary file"
 		exit 1
 	fi
 
+	# write the SQL commands to the temporary file 
 	cat << EOF > $tfile
 USE mysql;
 FLUSH PRIVILEGES;
@@ -52,6 +57,7 @@ GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
 
+	# run the initialization SQL commands
 	/usr/bin/mysqld --user=mysql --bootstrap < $tfile
 	rm -f $tfile
 

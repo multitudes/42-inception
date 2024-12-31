@@ -1,10 +1,11 @@
 # Function to get the IP address
 get_ip = $(shell hostname -I | cut -d' ' -f1)
+export IP_ADDR=$(get_ip)
 
 all: up
 
 up:
-	./setup.sh
+	./srcs/requirements/tools/setup.sh
 	@# -d is for detacher returning the terminal to the user
 	@# --remove-orphans is for removing the orphaned containers when sigint is sent
 	@# build is for rebuilding the images - and d is for detacher
@@ -34,7 +35,7 @@ clean: down
 
 fclean : clean
 	@# remove the images
-	./cleanup.sh
+	./srcs/requirements/tools/cleanup.sh
 	
 ls:
 	cd srcs && docker compose ps

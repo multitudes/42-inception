@@ -21,7 +21,7 @@ services:
     networks:
       - inception_network
     volumes:
-      - db-data:/var/lib/mysql
+      - mariadb-data:/var/lib/mysql
     restart: on-failure
 
   wordpress:
@@ -70,7 +70,7 @@ services:
     build: ./requirements/bonus/portainer/
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - prt:/data
+      - portainer-data:/data
     restart: always
     depends_on:
       - wordpress
@@ -80,20 +80,22 @@ services:
       - "9443:9443"
 
 volumes:
-  db-data:
+  mariadb-data:
+    name: mariadb-data
     driver: local
     driver_opts:
       type: none
       device: ~/data/db-data
       o: bind
   wd-files:
+    name: wd-files
     driver: local
     driver_opts:
       type: none
       device: ~/data/wd-files
       o: bind
-  prt:
-    name: prt
+  portainer-data:
+    name: portainer-data
     driver: local
     driver_opts:
       type: none

@@ -9,8 +9,9 @@ RUN apk add --no-cache wget && \
 
 WORKDIR /var/www/html
 
-# Download Adminer (specific version)
-RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php -O index.php
+# Copy the start script
+COPY tools/start.sh /tmp/start.sh
+RUN chmod +x /tmp/start.sh
 
 # Start PHP server to serve Adminer
-ENTRYPOINT [ "php", "-S", "0.0.0.0:8080", "-t", "/var/www/html" ]
+ENTRYPOINT ["/tmp/start.sh"]

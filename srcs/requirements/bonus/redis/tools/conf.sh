@@ -30,4 +30,14 @@ EOF
 chown www:www /etc/redis/redis.conf
 chmod 644 /etc/redis/redis.conf
 
+# Create a user www and change the ownership of the Redis configuration directory
+adduser -D -g 'www' www && \
+mkdir -p /var/lib/redis && \
+mkdir -p /etc/redis && \
+chown -R www:www /var/lib/redis && \
+chown -R www:www /etc/redis
+
 echo "[Redis config] Starting Redis server on port 6379."
+
+# Start the Redis server
+exec redis-server /etc/redis/redis.conf
