@@ -79,6 +79,17 @@ services:
     ports:
       - "9443:9443"
 
+  tor:
+    build:
+      context: ./requirements/bonus/tor
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "4242:4242"
+    networks:
+      - inception_network
+    restart: on-failure
+
 volumes:
   mariadb-data:
     name: mariadb-data

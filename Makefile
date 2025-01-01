@@ -34,6 +34,17 @@ re: down up
 ftp: 	
 	ftp $(get_ip)
 
+# to start and connect to the tor server
+hostname:
+	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
+	@echo $(ONION_ADDRESS) > onion_address.txt
+	@echo .onion address: $(ONION_ADDRESS)
+
+connect:
+	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
+	ssh -o ProxyCommand='nc -x localhost:9150 %h %p' -p 4242 root@$(ONION_ADDRESS)
+# also use the -i and path to private key if needed
+
 clean: down
 	@# remove the directories - I need sudo because of permissions
 	sudo rm -rf ~/data
