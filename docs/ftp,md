@@ -21,7 +21,7 @@ and this is all we need. By default there is a configuration file in /etc/vsftpd
     networks:
       - inception_network
     volumes:
-      - wd-files:/var/www/html
+      - wp-files:/var/www/html
     restart: on-failure
 ```
 

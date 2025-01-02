@@ -135,7 +135,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wd-files:/var/www/html
+      - wp-files:/var/www/html
     networks:
       - inception_network
     depends_on:
@@ -169,7 +169,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - wd-files:/var/www/html
+      - wp-files:/var/www/html
     depends_on:
       - mariadb
     restart: on-failure
@@ -181,11 +181,11 @@ volumes:
       type: none
       device: ~/data/db-data
       o: bind
-  wd-files:
+  wp-files:
     driver: local
     driver_opts:
       type: none
-      device: ~/data/wd-files
+      device: ~/data/wp-files
       o: bind
 
 networks:

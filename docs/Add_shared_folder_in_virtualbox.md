@@ -1,7 +1,6 @@
 
 # Add shared folder in VirtualBox
 
-Specifying `Auto-mount` and a mount point can help ensure that the shared folder is correctly mounted. 
 Here are the steps:
 
 1. **Add the Shared Folder in VirtualBox:**

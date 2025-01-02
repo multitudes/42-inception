@@ -18,8 +18,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wd-files:/var/www/html
-      - website_files:/var/www/website/
+      - wp-files:/var/www/html
     depends_on:
       - wordpress
       - website
@@ -36,7 +35,7 @@ services:
     build: requirements/wordpress
     env_file:      .env
     volumes:
-      - wd-files:/var/www/html
+      - wp-files:/var/www/html
     depends_on:
       - mariadb
       - redis
@@ -63,7 +62,7 @@ services:
       - "21:21"
       - 30000-30009:30000-30009
     volumes:
-      - wd-files:/var/www/html
+      - wp-files:/var/www/html
 
   portainer:
     <<: *common
@@ -78,12 +77,7 @@ services:
   
   website:
     <<: *common
-    container_name: website
-    image: website
-    init: true
-    build:
-      context: ./requirements/bonus/website/
-      dockerfile: Dockerfile
+    build: ./requirements/bonus/website/
     ports:
       - "8081:80"
     volumes:
@@ -104,12 +98,12 @@ volumes:
       type: none
       device: ~/data/db-data
       o: bind
-  wd-files:
-    name: wd-files
+  wp-files:
+    name: wp-files
     driver: local
     driver_opts:
       type: none
-      device: ~/data/wd-files
+      device: ~/data/wp-files
       o: bind
   portainer-data:
     name: portainer-data
@@ -126,13 +120,6 @@ volumes:
       o: bind
       device: ~/data/website_data
   
-  # static-website:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     o: bind
-  #     device: ~/data/static-website-data
-
 networks:
   inception_network:
     name: inception_network

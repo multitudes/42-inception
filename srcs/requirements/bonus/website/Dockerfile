@@ -1,33 +1,18 @@
-FROM		debian:11
+# I am using the debian image to run the busybox HTTP server
+# because the alpine image does not have the httpd package and 
+# gives an applets not found error when trying to run the httpd command
+# a better alternative would be to use the busybox official image
+# to have a smaller size
 
-# Create the working directory
-RUN			mkdir -p /var/www/website
+FROM debian:11
 
-# Set the working directory
+RUN apt update && apt install -y busybox && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory - will create if it does not exist
 WORKDIR	/var/www/website
 
 # Copy the website source code
 COPY		./srcs/* /var/www/website/
 
-# Install busybox
-RUN			apt update && apt install -y busybox
-
-# Start busybox HTTP server
-CMD			["busybox", "httpd", "-f", "-p", "8081"]
-
-# FROM alpine:3.20
-
-# RUN apk update && apk upgrade 
-# RUN	apk add --no-cache lighttpd
-
-# # Set the working directory
-# WORKDIR /var/www/website
-
-# # Copy the website source code
-# COPY ./tools/index.html /var/www/website/
-# COPY ./tools/lighttpd.conf /etc/lighttpd/lighttpd.conf
-
-# CMD chown -R www-data:www-data /var/www/website && \
-# 	chmod -R 755 /var/www/website
-
-# ENTRYPOINT [ "lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf" ]
+# Start busybox HTTP server on port 8081
+ENTRYPOINT ["busybox", "httpd", "-f", "-p", "8081"]

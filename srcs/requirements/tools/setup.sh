@@ -9,9 +9,7 @@ if ! grep -q "laurent.com" "/etc/hosts"; then
 fi
 # if these directories do not exist, create them
 mkdir -p ~/data/db-data
-mkdir -p ~/data/wd-files
+mkdir -p ~/data/wp-files
 mkdir -p ~/data/portainer
 mkdir -p ~/data/website_data
 
-
-# mkdir -p ~/data/static-website-data

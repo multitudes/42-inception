@@ -37,7 +37,7 @@ Docker does not automatically create the host directories specified in the devic
 
 ```bash
 mkdir -p ~/data/wd-data
-mkdir -p ~/data/wd-files
+mkdir -p ~/data/wp-files
 ```
 
 ## the env vars

@@ -33,7 +33,7 @@ services:
 	# persistent storage. the format is host:container. the host path is the path on the host machine and the container path is the path in the container.
 	# in this case the nginx uses the wordpress files
     volumes:
-      - wd-files:/var/www/html
+      - wp-files:/var/www/html
 	# the networks the container is connected to. the networks are defined in the networks section
     networks:
       - inception_network
@@ -57,11 +57,11 @@ volumes:
       device: ~/data/db-data
 	  # This specifies that the mount type is a bind mount.
       o: bind
-  wd-files:
+  wp-files:
     driver: local
     driver_opts:
       type: none
-      device: ~/data/wd-files
+      device: ~/data/wp-files
       o: bind
   # example of a tmpfs volume
  #tmp-data:
