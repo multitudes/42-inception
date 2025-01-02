@@ -61,9 +61,9 @@ You can set the `WP_USER_ROLE` environment variable in your `.env` file and use 
 
 ### Updated `.env` File:
 ```properties
-DOMAIN_NAME=lbrusa.42.de
+DOMAIN_NAME=lbrusa.42.fr
 DB_HOST=mariadb
-DOMAIN_NAME=lbrusa.42.de
+DOMAIN_NAME=lbrusa.42.fr
 
 # MySQL
 MYSQL_ROOT_PASSWORD=rut

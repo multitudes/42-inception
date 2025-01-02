@@ -225,7 +225,7 @@ I can start the nginx container on its own with the following commands
 docker build -t nginx .
 docker run --rm -d -p 443:443 --name nginx-container nginx
 # or with the env variable
-docker run --rm -d -p 443:443 --name  nginx-container -e DOMAIN_NAME=lbrusa.42.de nginx
+docker run --rm -d -p 443:443 --name  nginx-container -e DOMAIN_NAME=lbrusa.42.fr nginx
 ```
 I check if it is running:
 ```bash
