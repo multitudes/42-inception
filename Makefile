@@ -1,6 +1,7 @@
 # Function to get the IP address - I need the one from the vm
 # and I will pass it to the docker-compose file as environemnt variable
 get_ip = $(shell hostname -I | cut -d' ' -f1)
+
 # this is to silence the warnings but will not pass the variable
 # to the docker-compose command because we are in a makefile.
 # for that we need to pass it with the command as in the up command
@@ -30,20 +31,18 @@ logs:
 
 re: down up
 
-# to connect to the ftp server
 ftp: 	
 	ftp $(get_ip)
 
-# to start and connect to the tor server
-hostname:
-	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
-	@echo $(ONION_ADDRESS) > onion_address.txt
-	@echo .onion address: $(ONION_ADDRESS)
+# to start and connect to the tor server but not implemented yet
+# hostname:
+# 	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
+# 	@echo $(ONION_ADDRESS) > onion_address.txt
+# 	@echo .onion address: $(ONION_ADDRESS)
 
-connect:
-	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
-	ssh -o ProxyCommand='nc -x localhost:9150 %h %p' -p 4242 root@$(ONION_ADDRESS)
-# also use the -i and path to private key if needed
+# connect:
+# 	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
+# 	ssh -o ProxyCommand='nc -x localhost:9150 %h %p' -p 4242 root@$(ONION_ADDRESS)
 
 clean: down
 	@# remove the directories - I need sudo because of permissions

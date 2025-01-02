@@ -8,16 +8,13 @@ envsubst '$DOMAIN_NAME' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 # to debug
 cat /etc/nginx/nginx.conf
 
-# Create a directory for the website
-mkdir -p /var/www/html/
-
-
+cd 
 echo "creating certificates" 
 # openssl is used to generate a self-signed certificate
 openssl req -x509 -nodes -days 365 -newkey rsa:2048\
 		-keyout /etc/ssl/private/nginx-selfsigned.key\
 		-out /etc/ssl/certs/nginx-selfsigned.crt\
-		-subj "/C=DE/ST=IDF/L=BERLIN/O=42Network/OU=42BERLIN/CN=${DOMAIN_NAME:-localhost}"
+		-subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${UNIT}/CN=${DOMAIN_NAME:-localhost}"
 
 echo "creating a new user"
 # create a user www and change the ownership of the files in the /run/nginx/ directory
