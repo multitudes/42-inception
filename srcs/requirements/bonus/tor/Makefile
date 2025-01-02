@@ -1,6 +1,7 @@
+all: run 
+
 ps:
 	docker ps
-
 
 run:
 	docker build -t my-nginx-ssh-tor .
@@ -20,6 +21,8 @@ hostname:
 connect:
 	$(eval ONION_ADDRESS=$(shell docker exec tor cat /var/lib/tor/hidden_service/hostname))
 	ssh -o ProxyCommand='nc -x localhost:9150 %h %p' -p 4242 root@$(ONION_ADDRESS)
+# proxychains ssh -p 4242 root@$(ONION_ADDRESS) -i ~/.ssh/id_ed25519
+
 # also use the -i and path to private key if needed
 
 debug:
@@ -27,6 +30,6 @@ debug:
 	docker exec -it tor service tor status
 	docker exec -it tor service ssh status
 	docker exec -it tor cat /root/.ssh/authorized_keys
-	ss -lp | grep 9050
+	ss -lp | grep 9150
 
-.PHONY: ps build run stop logs hostname
+.PHONY: ps build run stop logs hostname connect debug

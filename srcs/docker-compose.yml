@@ -1,58 +1,60 @@
 name: inception
 
+# these are common to all containers
+x-common: &common
+  env_file:
+    - .env
+  restart: on-failure
+  networks:
+    - inception_network
+  init: true
+
 services:
 
   nginx:
+    <<: *common
     build: requirements/nginx
     env_file:       .env
     ports:
       - "443:443"
     volumes:
       - wd-files:/var/www/html
-    networks:
-      - inception_network
+      - website_files:/var/www/website/
     depends_on:
       - wordpress
-    restart: on-failure
+      - website
 
   mariadb:
+    <<: *common
     build: requirements/mariadb
     env_file:       .env
-    networks:
-      - inception_network
     volumes:
       - mariadb-data:/var/lib/mysql
-    restart: on-failure
 
   wordpress:
+    <<: *common
     build: requirements/wordpress
     env_file:      .env
-    networks:
-      - inception_network
     volumes:
       - wd-files:/var/www/html
     depends_on:
       - mariadb
       - redis
-    restart: on-failure
 
   adminer:
+    <<: *common
     build: requirements/bonus/adminer
     ports:
       - 8080:8080
-    networks:
-      - inception_network
     depends_on:
       - wordpress
-    restart: on-failure
 
   redis:
+    <<: *common
     build: requirements/bonus/redis
-    networks:
-      - inception_network
-    restart: on-failure
 
   ftp:
+    <<: *common
     build: requirements/bonus/ftp
     env_file:       .env
     environment:
@@ -60,35 +62,39 @@ services:
     ports:
       - "21:21"
       - 30000-30009:30000-30009
-    networks:
-      - inception_network
     volumes:
       - wd-files:/var/www/html
-    restart: on-failure
 
   portainer:
+    <<: *common
     build: ./requirements/bonus/portainer/
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - portainer-data:/data
-    restart: always
     depends_on:
       - wordpress
-    networks:
-      - inception_network
     ports:
       - "9443:9443"
-
-  tor:
+  
+  website:
+    <<: *common
+    container_name: website
+    image: website
+    init: true
     build:
-      context: ./requirements/bonus/tor
+      context: ./requirements/bonus/website/
       dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "4242:4242"
-    networks:
-      - inception_network
-    restart: on-failure
+      - "8081:80"
+    volumes:
+      - website_files:/var/www/website/
+
+  # tor:
+  #   <<: *common
+  #   build: ./requirements/bonus/tor
+  #   ports:
+  #     - "80:80"
+  #     - "4242:4242"
 
 volumes:
   mariadb-data:
@@ -112,6 +118,20 @@ volumes:
       type: none
       o: bind
       device: ~/data/portainer
+    # website
+  website_files:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/data/website_data
+  
+  # static-website:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     o: bind
+  #     device: ~/data/static-website-data
 
 networks:
   inception_network:
