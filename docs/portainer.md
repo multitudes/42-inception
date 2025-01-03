@@ -75,3 +75,6 @@ Here's why:
 
 - Port 8000 is typically used for internal communication and may not be necessary for typical usage. 
 
+## links
+
+https://github.com/portainer/portainer/issues/5754

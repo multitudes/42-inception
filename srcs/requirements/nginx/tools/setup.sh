@@ -8,7 +8,6 @@ envsubst '$DOMAIN_NAME' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 # to debug
 cat /etc/nginx/nginx.conf
 
-cd 
 echo "creating certificates" 
 # openssl is used to generate a self-signed certificate
 openssl req -x509 -nodes -days 365 -newkey rsa:2048\
