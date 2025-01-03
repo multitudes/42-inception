@@ -6,7 +6,7 @@ read_secret() {
     if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
         cat "$secret_file"
     else
-        echo ""
+        echo "Error reading secret from $secret_file"
     fi
 }
 
