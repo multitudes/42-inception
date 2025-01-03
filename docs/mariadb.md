@@ -310,5 +310,35 @@ volumes:
 
 
 
+#### 1.1.4. Test the mariadb container
+Now, you can build your container and tests it. Inside the folder `mariadb`, run the following command. `build` is the command to build the image, and `-t` is the tag name and `mariadb` is the name that I recommend and `.` indicates that the `Dockerfile` is in the current folder.
+```bash
+docker build -t mariadb .
+```
+Then, run the container with the following command. `run` is the command to run the container, `-d` is the flag to run the container in background, and `mariadb` is the name of the image that we want to run.
+```bash
+docker run -d mariadb
+```
+Now, run the following command to check if the container is running and get its ID.
+```bash
+docker ps -a
+```
+With the ID copied, run the next command to get inside the container. `exec` is the command to execute a command inside the container, `-it` is the flag to run the command in interactive mode, and `ID` is the ID of the container and `/bin/bash` is the command that we want to execute, in this case we want to use its terminal.
+```bash
+docker exec -it copiedID /bin/bash
+```
+Now, you are inside the container. Run the following command to check if the database is created correctly and running. 
+```bash
+mysql -u theuser -p thedatabase
+```
+if you see the the prompt `MariaDB [thedatabase]>` it means that all is ok. Too see the tables, run the following command. For now, we don't have any table, so it'll return an empty set, But at the end of the project, it'll have some tables created by wordpress.
+```bash
+SHOW TABLES;
+```
+Now, to exit mysql, run `exit` then run `exit` again to exit the container. So it's all working, then we'll clean our container test. To stop the container, remove it and the image run the following commands.
+```bash
+docker rm -f $(docker ps -aq) &&  docker rmi -f $(docker images -aq)
+```
+
 ## links
 https://mariadb.org/download/  

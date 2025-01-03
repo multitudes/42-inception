@@ -93,3 +93,21 @@ I'd be glad to analyze your Dockerfile and Nginx configuration and provide insig
         - **`fastcgi_index index.php;`:** This directive sets the default FastCGI index file to `index.php`.
         - **`fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;`:** This line maps the requested URI to the corresponding PHP script file within the document root.
         - **`fastcgi_pass wordpress:9000;`:** This directive instructs Nginx to forward PHP requests to the `wordpress` container on port 9000. Ensure your WordPress container is accessible and running on this port.
+
+
+#### Test the wordpress container
+Go to the wordpress folder and run the following command .
+```bash
+docker build -t wordpress .
+docker run -d wordpress
+docker ps -a
+docker exec -it copiedID /bin/bash
+```
+Now, you are inside the container. Run the following command to check if the wordpress files are there. The sleep here is used to give time to the container to download the files.
+```bash
+sleep 30 && ls /var/www/inception/
+```
+If you see the wordpress files, it means that all is ok. At the moment we won't check if the containers is talking with each other because we'll do it with the compose file. So, exits the container and let's clean our container test.
+```bash
+docker rm -f $(docker ps -aq) &&  docker rmi -f $(docker images -aq)
+```
