@@ -5,15 +5,22 @@
 # ## for more info visit:
 # ## https://github.com/yobasystems/alpine-mariadb/tree/master/alpine-mariadb-aarch64
 
-# # Function to read secret from file
-# read_secret() {
-#     local secret_file="$1"
-#     if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
-#         cat "$secret_file"
-#     else
-#         echo ""
-#     fi
-# }
+# Function to read secret from file
+read_secret() {
+    local secret_file="$1"
+    if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
+        cat "$secret_file"
+    else
+        echo ""
+    fi
+}
+
+# Read passwords from secrets
+MYSQL_PASSWORD=$(read_secret $MYSQL_PASSWORD_FILE)
+MYSQL_ROOT_PASSWORD=$(read_secret $MYSQL_ROOT_PASSWORD_FILE)
+
+echo "[DEBUG] MYSQL_PASSWORD: ${MYSQL_PASSWORD}"
+echo "[DEBUG] MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}"
 
 echo "[DB config] Configuring MariaDB..."
 
@@ -70,6 +77,11 @@ sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|g" /etc/my.cnf.d/mariadb-ser
 
 echo "[DB config] Starting MariaDB daemon on port 3306."
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0
+
+
+
+
+## this for reference is the original script from the official mariadb Docker image
 
 # #!/bin/sh
 

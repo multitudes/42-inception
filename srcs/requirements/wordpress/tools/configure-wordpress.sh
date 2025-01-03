@@ -1,5 +1,20 @@
 #!/bin/sh
 
+# Function to read secret from file
+read_secret() {
+    local secret_file="$1"
+    if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
+        cat "$secret_file"
+    else
+        echo ""
+    fi
+}
+
+# read secrets
+MYSQL_PASSWORD=$(read_secret $WORDPRESS_DB_PASSWORD_FILE)
+WP_ADMIN_PASS=$(read_secret $WORDPRESS_ADMIN_PASSWORD_FILE)
+WP_USER_PASS=$(read_secret $WORDPRESS_USER_PASSWORD_FILE)
+
 # Configure PHP-fpm to listen on internal inception network port 9000
 sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /etc/php82/php-fpm.d/www.conf
 
