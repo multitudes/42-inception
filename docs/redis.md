@@ -18,3 +18,37 @@ MONITOR -
 ```
 
 Then, go to your wordpress website and edit or add anything: posts, comments, themes, etc. There will appear all sorts of logs in your terminal. 
+
+
+In your Redis configuration file, the lines:
+
+```
+save 900 1
+save 300 10
+save 60 10000
+```
+
+define the conditions under which Redis will automatically save its data to disk. This is crucial for data persistence, meaning that if Redis restarts, it can recover its data from the saved file instead of starting with an empty database.
+
+Here's how these lines work:
+
+* **`save <seconds> <changes>`:** This directive specifies that Redis should save a snapshot of its current dataset to disk (in a file named `dump.rdb` by default) if at least `changes` number of keys have been modified within the last `seconds`.
+
+* **Breakdown:**
+    - `save 900 1`: Save the dataset if at least 1 key has been modified within the last 900 seconds (15 minutes).
+    - `save 300 10`: Save the dataset if at least 10 keys have been modified within the last 300 seconds (5 minutes).
+    - `save 60 10000`: Save the dataset if at least 10,000 keys have been modified within the last 60 seconds (1 minute).
+
+**Why these settings?**
+
+These settings provide a balance between:
+
+* **Data Persistence:** Ensuring that data is saved frequently to prevent data loss in case of a crash or restart.
+* **Performance:** Avoiding excessive disk I/O operations, which can impact Redis' performance.
+
+**Important Notes:**
+
+* These are default settings and can be adjusted based on your specific needs and workload.
+* Consider enabling AOF (Append Only File) in addition to RDB for enhanced data durability. AOF continuously appends all write operations to a file, providing a more granular and up-to-date recovery mechanism.
+
+By understanding these configurations, you can fine-tune Redis's persistence behavior to suit the specific requirements of your application.

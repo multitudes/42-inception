@@ -1,5 +1,3 @@
-# The latest version of alpine is 3.21
-# therefore, we are using 3.20
 FROM alpine:3.20
 
 RUN apk update && apk upgrade && \

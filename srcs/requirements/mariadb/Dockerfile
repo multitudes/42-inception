@@ -14,5 +14,6 @@ RUN mkdir -p /var/lib/mysqltmp && \
 COPY ./tools/run.sh /tmp/run.sh
 RUN chmod +x /tmp/run.sh
 
+# Configure and start MariaDB on port 3306 
 ENTRYPOINT ["sh","/tmp/run.sh"]
 

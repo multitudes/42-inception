@@ -1,9 +1,8 @@
 #!/bin/sh 
 
 echo "[vsftpd config] Configuring vsftpd..."
-# Function to get the IP address of the virtual machine's network interface
 
-# a trick to perform the ftp server configuration only once
+# here a trick to perform the ftp server configuration only once
 # If the backup file does not exist, create it and configure the FTP server
 if [ ! -f "/etc/vsftpd/vsftpd.conf.bak" ]; then
 
@@ -30,9 +29,9 @@ fi
 sed -i "s/\${IP_ADDR}/$IP_ADDR/g" /etc/vsftpd/vsftpd.conf
 
 # debug
-# echo "FTP_USER=${FTP_USER}"
-# echo "FTP_PASS=${FTP_PASS}"
-# echo "FTP ip=${IP_ADDR}"
+echo "FTP_USER=${FTP_USER}"
+echo "FTP_PASS=${FTP_PASS}"
+echo "FTP ip=${IP_ADDR}"
 
 echo "FTP started on :21"
 exec /usr/sbin/vsftpd /etc/vsftpd/vsftpd.conf

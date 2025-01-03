@@ -39,5 +39,5 @@ chown -R www:www /etc/redis
 
 echo "[Redis config] Starting Redis server on port 6379."
 
-# Start the Redis server
+# Start the Redis server on port 6379
 exec redis-server /etc/redis/redis.conf

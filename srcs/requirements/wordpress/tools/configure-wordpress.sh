@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Function to read secret from file
+# Function to read secret from file - Just a bit more robust than just cat
 read_secret() {
     local secret_file="$1"
     if [ -f "$secret_file" ] && [ -r "$secret_file" ]; then
@@ -23,14 +23,14 @@ adduser -D -g 'www' www && \
 mkdir -p /var/www/html && \
 chown -R www:www /var/www/html
 
-# I need this otherwise php will not be found
+# I need this otherwise php as a command will not be found!
 ln -s /usr/bin/php82 /usr/bin/php 
 
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&\
 chmod +x wp-cli.phar &&\
 mv wp-cli.phar /usr/local/bin/wp
 
-# make sure the files are accessible on the volume
+# make sure the files are accessible on the volume - change permissions
 chmod -R 755 /var/www/html
 
 echo "[WP config] Configuring WordPress..."
@@ -38,7 +38,7 @@ echo "[WP config] Configuring WordPress..."
 echo "[WP config] Waiting for MariaDB..."
 while ! mysql -h${DB_HOST} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} &>/dev/null;
 do
-	# this is to debug 
+	# this is to debug while I wait for mariadb...
 	echo "[WP config] DEBUG - DB_HOST: ${DB_HOST}"
 	echo "[WP config] DEBUG - MYSQL_USER: ${MYSQL_USER}"
 	echo "[WP config] DEBUG - MYSQL_PASSWORD: ${MYSQL_PASSWORD}"
@@ -60,12 +60,14 @@ do
 done
 echo "[WP config] MariaDB accessible."
 
+# Check if WordPress is already configured
 if [ -f ${WP_PATH}/wp-config.php ]
 then
 	echo "[WP config] WordPress already configured."
 else
 	echo "[WP config] Configuring WordPress..."
-
+	
+	# su-exec is the alpine equivalent of sudo
 	su-exec  www  wp core download --allow-root
 	su-exec  www  wp config create \
 		--dbname=${MYSQL_DATABASE} \

@@ -16,4 +16,5 @@ RUN		chmod +x /tmp/configure-wordpress.sh
 
 WORKDIR /var/www/html
 
+# Configure if needed and start the wordpress server on port 9000
 ENTRYPOINT	[ "/tmp/configure-wordpress.sh" ]
