@@ -1,7 +1,7 @@
 FROM alpine:3.20
 
 RUN apk update && apk upgrade && \
-	apk add --no-cache redis && \
+	apk add --no-cache redis php82-pecl-redis && \
 	rm -rf /var/cache/apk
 
 # Copy the configuration file
