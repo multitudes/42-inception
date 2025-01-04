@@ -99,8 +99,6 @@ else
 	mkdir -p /run/php
 fi
 
-chown -R www:www /var/www/html
-
 # Make wp-content writable by PHP
 chown -R www:www /var/www/html/wp-content
 chmod -R 775 /var/www/html/wp-content

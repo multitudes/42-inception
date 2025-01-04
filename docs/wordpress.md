@@ -50,100 +50,18 @@ In WordPress, user roles define the set of permissions and capabilities assigned
 ### Setting the `WP_USER_ROLE` in Your Script:
 You can set the `WP_USER_ROLE` environment variable in your `.env` file and use it in your WordPress configuration script.
 
-### Updated `.env` File:
+### Updated `.env` File, example:
 ```properties
-DOMAIN_NAME=lbrusa.42.fr
-DB_HOST=mariadb
-DOMAIN_NAME=lbrusa.42.fr
-
-# MySQL
-MYSQL_ROOT_PASSWORD=rut
-MYSQL_DATABASE=mydatabase
-MYSQL_USER=mysql
-MYSQL_PASSWORD=mypassword
-# optional
-MYSQL_CHARSET=utf8
-MYSQL_COLLATION=utf8_general_ci
-
-# WordPress
+# Wordpress
 WP_PATH=/var/www/html
 WP_TITLE=Inception
 WP_ADMIN_USER=admin
-WP_ADMIN_PASS=admin_password
 WP_ADMIN_EMAIL=lbrusa@example.com
 WP_USER=laurent
-WP_USER_PASS=user_password
 WP_USER_EMAIL=lbrusa@example.com
 WP_USER_ROLE=subscriber
 WP_THEME=bravada
 ```
-
-### Updated 
-
-configure-wordpress.sh
-
- Script:
-Ensure the script uses the `WP_USER_ROLE` environment variable:
-
-```bash
-#!/bin/sh
-
-echo "[WP config] Configuring WordPress..."
-
-echo "[WP config] Waiting for MariaDB..."
-while ! mysql -h${DB_HOST} -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} &>/dev/null; do
-    echo "[WP config] DEBUG - DB_HOST: ${DB_HOST}"
-    echo "[WP config] DEBUG - DB_USER: ${DB_USER}"
-    echo "[WP config] DEBUG - DB_PASS: ${DB_PASSWORD}"
-    echo "[WP config] DEBUG - DB_NAME: ${DB_NAME}"
-    echo "[WP config] DEBUG - DOMAIN_NAME: ${DOMAIN_NAME}"
-    echo "[WP config] DEBUG - WP_TITLE: ${WP_TITLE}"
-    echo "[WP config] DEBUG - WP_ADMIN_USER: ${WP_ADMIN_USER}"
-    echo "[WP config] DEBUG - WP_ADMIN_PASS: ${WP_ADMIN_PASS}"
-    echo "[WP config] DEBUG - WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}"
-    echo "[WP config] DEBUG - WP_USER: ${WP_USER}"
-    echo "[WP config] DEBUG - WP_USER_EMAIL: ${WP_USER_EMAIL}"
-    echo "[WP config] DEBUG - WP_USER_PASS: ${WP_USER_PASS}"
-    echo "[WP config] DEBUG - WP_PATH: ${WP_PATH}"
-    echo "[WP config] DEBUG - WP_USER_ROLE: ${WP_USER_ROLE}"
-
-    echo "[WP config] MariaDB not accessible. Retrying in 2 seconds..."
-    sleep 2
-done
-echo "[WP config] MariaDB accessible."
-
-if [ -f ${WP_PATH}/wp-config.php ]; then
-    echo "[WP config] WordPress already configured."
-else
-    echo "[WP config] Setting up WordPress..."
-    echo "[WP config] Updating WP-CLI..."
-    wp-cli.phar cli update --yes --allow-root
-    echo "[WP config] Downloading WordPress..."
-    wp-cli.phar core download --allow-root
-    echo "[WP config] Creating wp-config.php..."
-    wp-cli.phar config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASSWORD} --dbhost=${DB_HOST} --path=${WP_PATH} --allow-root
-    echo "[WP config] Installing WordPress core..."
-    wp-cli.phar core install --url=${DOMAIN_NAME}/wordpress --title=${WP_TITLE} --admin_user=${WP_ADMIN_USER} --admin_password=${WP_ADMIN_PASS} --admin_email=${WP_ADMIN_EMAIL} --path=${WP_PATH} --allow-root
-    echo "[WP config] Creating WordPress default user..."
-    wp-cli.phar user create ${WP_USER} ${WP_USER_EMAIL} --user_pass=${WP_USER_PASS} --role=${WP_USER_ROLE} --path=${WP_PATH} --allow-root
-    echo "[WP config] Installing WordPress theme..."
-    wp-cli.phar theme install bravada --path=${WP_PATH} --activate --allow-root
-    wp-cli.phar theme status bravada --allow-root
-fi
-
-echo "[WP config] Starting WordPress fastCGI on port 9000."
-exec /usr/sbin/php-fpm82 -F -R
-```
-
-### Summary:
-- **Common User Roles**: `administrator`, `editor`, `author`, `contributor`, `subscriber`.
-- **Set `WP_USER_ROLE`**: Define the `WP_USER_ROLE` environment variable in your `.env` file.
-- **Use in Script**: Ensure the WordPress configuration script uses the `WP_USER_ROLE` environment variable.
-
-This setup allows you to specify the role for the default WordPress user created by your configuration script.
-
-
-
 
 ## links
 https://hub.docker.com/_/wordpress  
