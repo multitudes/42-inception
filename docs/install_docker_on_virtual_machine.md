@@ -2,8 +2,6 @@
 
 You need to install Docker on your virtual machine to create and run Docker containers. Here are the steps to install Docker and create a Dockerfile for NGINX with TLSv1.2 or TLSv1.3 only:
 
-### Install Docker on Debian
-
 1. **Update the package list**:
    ```sh
    sudo apt update
@@ -114,7 +112,7 @@ Here’s a brief explanation of the steps involved:
 Without adding the GPG key, your package manager would not be able to verify the authenticity of the Docker packages, and you might encounter security warnings or errors during installation.
 
 
-## why do i need to use sudo
+## sudo issues with Docker?
 If you need to use `sudo` to run Docker commands inside your virtual machine, it means your user does not have the necessary permissions to access the Docker daemon. This is typically because your user is not part of the `docker` group.
 
 To allow your user to run Docker commands without `sudo`, you need to add your user to the `docker` group. Here are the steps:
@@ -134,6 +132,4 @@ To allow your user to run Docker commands without `sudo`, you need to add your u
    groups
    ```
 
-4. **Run Docker Commands Without `sudo`**: You should now be able to run Docker commands without needing `sudo`.
-
-If you still encounter issues, ensure that the Docker service is running and that your user is correctly added to the `docker` group.
+You should now be able to run Docker commands without needing `sudo`.
