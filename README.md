@@ -255,5 +255,5 @@ docker tutorials
 https://docker-curriculum.com/  
 
 https://docs.docker.com/compose/support-and-feedback/samples-for-compose/  
-
 https://docs.docker.com/compose/gettingstarted/  
+https://github.com/docker/awesome-compose/blob/master/official-documentation-samples/wordpress/README.md  
