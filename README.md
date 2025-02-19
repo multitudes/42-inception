@@ -9,7 +9,6 @@ Another project for 42 Berlin.
 ## Requirements
 This project needs to be done on a Virtual Machine. Since we do not have permission to edit the /etc/hosts file on the school computers, we will use a virtual machine to simulate a local network. Without being able to edit the /etc/hosts file, we will not be able to access the services via a custom domain name.
 
-And also required:
 - All the files required for the configuration of my project must be placed in a srcs folder.
 - A Makefile must be located at the root of my directory. It must set up my entire application (i.e., it has to build the Docker images using docker-compose.yml).
 - I have to use docker compose.
@@ -119,11 +118,7 @@ I will use the makefile to start the docker-compose file and restart the contain
 ```sh
 docker compose up --build
 ```
-
-### When to Use `--build`:
-- When you have made changes to the Dockerfiles.
-- When you have made changes to the files in the build context (e.g., application code, configuration files).
-- When you want to ensure that the latest changes are included in the images.
+`--build` can be used to force rebuild the container, otherwise it will check what has been changed and rebuild ony the necessary parts.
 
 ### Example `docker-compose.yml`:
 ```yaml
@@ -257,7 +252,6 @@ https://alpinelinux.org/releases/
 
 docker tutorials  
 https://docker-curriculum.com/  
-
 https://docs.docker.com/compose/support-and-feedback/samples-for-compose/  
 https://docs.docker.com/compose/gettingstarted/  
 https://github.com/docker/awesome-compose/blob/master/official-documentation-samples/wordpress/README.md  
