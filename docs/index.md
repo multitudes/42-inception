@@ -1,4 +1,6 @@
-# Inception
+# 42 - inception
+
+<!-- The code is on GitHub: [42-inception](https://github.com/multitudes/42-inception).  -->
 
 Another project for 42 Berlin. This time we will deploy a docker compose project with a wordpress website, a mariadb database and an nginx server.
 
