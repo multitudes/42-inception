@@ -1,4 +1,4 @@
-# 42 - inception
+# 42-inception
 
 <!-- The code is on GitHub: [42-inception](https://github.com/multitudes/42-inception).  -->
 
