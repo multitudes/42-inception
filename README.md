@@ -6,7 +6,7 @@
 
 Another project for 42 Berlin.
 
-The documentation can be accessed [here](https://multitudes.github.io/42-Inception/).  
+The documentation can be accessed [here](https://multitudes.github.io/42-inception/).  
 
 ## Requirements
 This project needs to be done on a Virtual Machine. Since we do not have permission to edit the /etc/hosts file on the school computers, we will use a virtual machine to simulate a local network. Without being able to edit the /etc/hosts file, we will not be able to access the services via a custom domain name.
